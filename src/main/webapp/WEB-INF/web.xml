@@ -15,6 +15,11 @@
         <servlet-class>pl.sklep.serwlety.LoginServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>DiscServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.DiscServlet</servlet-class>
+    </servlet>
+
     <!--Here we're defining URL mapping to each previously defined servlets-->
 
     <servlet-mapping>
@@ -25,6 +30,11 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/logowanie</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DiscServlet</servlet-name>
+        <url-pattern>/wylogowanie</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -13,12 +13,23 @@ import java.lang.Override;
  * Created by piotr on 23.07.14.
  */
 public class FormServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         resp.setContentType("text/html");
-        req.getRequestDispatcher("formularz.html").forward(req, resp);
 
-        
+        HttpSession sesja = req.getSession();
+        sesja.setMaxInactiveInterval(20);
+
+
+        if (sesja.getAttribute("login") == null) {
+            //req.getRequestDispatcher("formularz.html").forward(req, resp);
+            resp.sendRedirect("formularz.html");
+        }
+        else {
+            //req.getRequestDispatcher("powitanie.html").forward(req, resp);
+            resp.sendRedirect("powitanie.html");
+        }
     }
 }

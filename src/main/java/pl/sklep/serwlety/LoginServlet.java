@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
@@ -17,10 +18,11 @@ import java.sql.Statement;
  */
 public class LoginServlet extends HttpServlet {
     HttpServletRequest req;
-
+    HttpSession sesja;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.req = req;
+        sesja = req.getSession();
         resp.setContentType("text/html");
         PrintWriter pw = resp.getWriter();
         DataBaseControl bazaDanych = new DataBaseControl();
@@ -33,10 +35,16 @@ public class LoginServlet extends HttpServlet {
         boolean czyZalogowano = sprawdzUzytkownika(bazaDanych, pw);
 
         if (czyZalogowano){
-            pw.println("Witamy!!!");
+            //req.getRequestDispatcher("form");
+            resp.sendRedirect("form");
         }
         else{
-            pw.println("Podano nieprawidlowe dane");
+            pw.println("Podano nieprawidlowe dane. Zaraz nastąpi przekierowanie...");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         rozlaczZbaza(bazaDanych, pw);
     }
@@ -75,6 +83,7 @@ public class LoginServlet extends HttpServlet {
                 String user = wynik.getString("login");
                 String password = wynik.getString("password");
                 if (user.equals(login) && password.equals(haslo)){
+                    sesja.setAttribute("login", user);
                     return true;
                 }
             }
