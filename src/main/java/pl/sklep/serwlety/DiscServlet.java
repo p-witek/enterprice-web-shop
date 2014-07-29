@@ -16,13 +16,13 @@ public class DiscServlet extends HttpServlet {
         resp.setContentType("text/plain");
         req.getSession().invalidate();
         PrintWriter pw = resp.getWriter();
-        pw.println("Wylogowano :<. Zaraz nastąpi przekierowanie.");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            pw.println("problem z watkiem");
-        }
+        //pw.println("Wylogowano :<. Zaraz nastąpi przekierowanie.");
+        //try {
+            //Thread.sleep(2000);
+        //} catch (InterruptedException e) {
+          //  pw.println("problem z watkiem");
+        //}
         //req.getRequestDispatcher("formularz.html").forward(req, resp);
-        resp.sendRedirect("formularz.html");
+        resp.sendRedirect("formularz.jsp");
     }
 }

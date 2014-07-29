@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 pageEncoding="ISO-8859-1"%>
+<% session.invalidate(); %>
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    <link rel="Stylesheet" type="text/css" href="css/style.css" />
     <meta charset="UTF-8">
     <title></title>
 </head>
