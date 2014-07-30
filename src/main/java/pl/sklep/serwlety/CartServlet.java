@@ -90,7 +90,8 @@ public class CartServlet extends HttpServlet {
                 "  public.\"user\"\n" +
                 "WHERE \n" +
                 "  \"Koszyk\".id_usera = \"user\".id_usera\n" +
-                "  AND \"user\".login = '" + login +"';";
+                "  AND \"user\".login = '" + login +"' AND" +
+                "\"Koszyk\".id_zamowienia IS NULL;";
 
         ResultSet wynik = null;
 

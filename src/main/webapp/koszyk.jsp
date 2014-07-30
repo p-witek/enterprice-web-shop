@@ -21,7 +21,7 @@
         %>
         <table>
             <%
-            if (prod != null) for (int i = 0; i < prod.size(); i++){
+            if (prod != null){ for (int i = 0; i < prod.size(); i++){
                   Produkt produkt = (Produkt) prod.get(i);
                   String id = produkt.getIdString();
                   String nazwa = produkt.getNazwa();
@@ -32,9 +32,18 @@
                 <td><%=nazwa %></td>
                 <td><%= cena %></td>
             </tr>
-            <% } else {%>
+
+            <% } %>
             <tr>
-                <td>Nie masz jeszcze żadnych produktów w koszyku :< :< :< </td>
+                <td>
+                    <form action="zamowienia">
+                        <button type="submit" name="subBuyServ" value="kup">Kup</button>
+                    </form>
+                </td>
+            </tr>
+            <%}else {%>
+            <tr>
+                <td>Nie masz jeszcze zadnych produktow w koszyku :< :< :< </td>
             </tr>
             <% } %>
         </table>

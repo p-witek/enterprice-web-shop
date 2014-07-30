@@ -38,6 +38,11 @@
         <servlet-class>pl.sklep.serwlety.KatServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>BuyServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.BuyServlet</servlet-class>
+    </servlet>
+
     <!--Here we're defining URL mapping to each previously defined servlets-->
 
     <servlet-mapping>
@@ -63,6 +68,11 @@
     <servlet-mapping>
         <servlet-name>KatServlet</servlet-name>
         <url-pattern>/kat</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>BuyServlet</servlet-name>
+        <url-pattern>/zamowienia</url-pattern>
     </servlet-mapping>
 
 </web-app>
