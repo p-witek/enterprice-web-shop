@@ -32,6 +32,10 @@
                 <td><%=nazwa %></td>
                 <td><%= cena %></td>
             </tr>
+            <% } else {%>
+            <tr>
+                <td>Nie masz jeszcze żadnych produktów w koszyku :< :< :< </td>
+            </tr>
             <% } %>
         </table>
         <a href="form">glowna</a>

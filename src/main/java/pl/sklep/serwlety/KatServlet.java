@@ -18,7 +18,7 @@ public class KatServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String kat = (String) req.getParameter("kategoria");
+        String kat = req.getParameter("kategoria");
 
         if (req.getSession().getAttribute("login") != null) {
             wybierzProduktyZJednejKat(kat, req, resp);
