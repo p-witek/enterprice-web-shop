@@ -23,20 +23,61 @@ public class BuyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String wybor = req.getParameter("subBuyServ");
 
+        PrintWriter pw = resp.getWriter();
+
+
         if (wybor.equals("kup")) {
             int id_zamowienia = stworzZamowienie(req, resp);
             aktualizujKoszyk(req, resp, id_zamowienia);
+
+        }
+        else if (wybor.equals("wyswietl")){
+            przygotujZamowienia(req, resp);
+            req.getRequestDispatcher("zamowienia.jsp").forward(req,resp);
         }
 
 
     }
 
-    private void przygotujZamowienia(){
+    private void przygotujZamowienia(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        DataBaseControl dbc = polaczZBaza(resp.getWriter());
         ArrayList<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
+        String login = (String) req.getSession().getAttribute("login");
 
-        String zamowieniaQuery = "";
+        String zamowieniaQuery = "SELECT \n" +
+                "  \"Zamowienie\".id_zamowienia, \n" +
+                "  \"Zamowienie\".data_zamowienia, \n" +
+                "  \"Zamowienie\".adres\n" +
+                "FROM \n" +
+                "  public.\"Zamowienie\", \n" +
+                "  public.\"Koszyk\", \n" +
+                "  public.\"user\"\n" +
+                "WHERE \n" +
+                "  \"Koszyk\".id_zamowienia = \"Zamowienie\".id_zamowienia AND\n" +
+                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
+                "  \"user\".login = '" + login + "';";
+
+        ResultSet wynik = null;
+
+        try {
+            wynik = dbc.zapytanie(zamowieniaQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            while(wynik.next()){
+                zamowienia.add(new Zamowienie(wynik.getInt("id_zamowienia"),
+                        wynik.getString("data_zamowienia"), wynik.getString("adres")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        req.getSession().setAttribute("zamowienia", zamowienia);
     }
-    private int stworzZamowienie(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    private int stworzZamowienie(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException{
         DataBaseControl dbc = polaczZBaza(resp.getWriter());
         String data_zamowienia = aktualnaData();
         String adres = "ulica";

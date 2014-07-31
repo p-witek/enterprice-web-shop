@@ -16,8 +16,19 @@ public class Zamowienie {
         kupioneProdukty = new ArrayList<Produkt>();
     }
 
+    public Zamowienie(int id, String data, String adres){
+        kupioneProdukty = new ArrayList<Produkt>();
+        this.id = id;
+        this.data = data;
+        this.adres = adres;
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getIdString(){
+        return Integer.toString(id);
     }
 
     public int getId() {

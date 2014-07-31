@@ -54,6 +54,11 @@
                         <button type="submit" name="pokazKosz">Pokaz Koszyk</button>
                     </form>
                 </td>
+                <td>
+                    <form action="zamowienia">
+                        <button type="submit" name="subBuyServ" value="wyswietl">Historia zamowien</button>
+                    </form>
+                </td>
             </tr>
         </table>
     </div>
