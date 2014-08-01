@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@ page import=" java.util.ArrayList" %>
     <%@ page import="pl.sklep.obiekty.Zamowienie" %>
+    <%@ page import="pl.sklep.obiekty.Produkt" %>
 
     <% if (session.getAttribute("login") == null) response.sendRedirect("form"); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,8 +17,6 @@
         <h1>Twoje zamowienia</h1>
 
         <% ArrayList<Zamowienie> zam = (ArrayList<Zamowienie>) session.getAttribute("zamowienia");
-
-
         %>
         <table>
             <%
@@ -26,11 +25,23 @@
                   String id = zamowienie.getIdString();
                   String data = zamowienie.getData();
                   String adres = zamowienie.getAdres();
+                  ArrayList<Produkt> produkty = zamowienie.getKupioneProdukty();
             %>
             <tr>
                 <td><%= id %></td>
                 <td><%= data %></td>
                 <td><%= adres %></td>
+            </tr>
+            <tr>
+                <table>
+                    <% for (int j = 0; j < produkty.size(); j++){ %>
+                        <tr>
+                            <td><%= produkty.get(j).getKategoria() %></td>
+                            <td><%= produkty.get(j).getNazwa() %></td>
+                            <td><%= produkty.get(j).getCena() %></td>
+                        </tr>
+                    <% } %>
+                </table>
             </tr>
 
             <% } %>

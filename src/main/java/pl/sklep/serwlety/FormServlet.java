@@ -25,7 +25,7 @@ public class FormServlet extends HttpServlet {
         resp.setContentType("text/html");
 
         HttpSession sesja = req.getSession();
-        sesja.setMaxInactiveInterval(20);
+        sesja.setMaxInactiveInterval(2000);
 
 
         if (sesja.getAttribute("login") == null) {

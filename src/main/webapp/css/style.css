@@ -11,6 +11,6 @@
 body{
 background-color: green;}
 
-p, table, h1{
+p, table, h1, body{
     color: YellowGreen;
 }

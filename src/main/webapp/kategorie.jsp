@@ -21,24 +21,24 @@
             <% Iterator it = kategorie.iterator();
                 while(it.hasNext()){
                 String next =(String) it.next();%>
-            <form action="kat">
+
                 <tr>
                     <td>
-
-                         <input type="submit" class="kat" name="kategoria" value="<%= next %>" />
-
+                        <form action="kat">
+                            <input type="submit" class="kat" name="kategoria" value="<%= next %>" />
+                        </form>
                      </td>
                      <% if (it.hasNext()){
                       next =(String) it.next();%>
                      <td>
-
+                        <form action="kat">
                           <input type="submit" class="kat" name="kategoria" value="<%= next %>" />
-
+                        </form>
 
                      </td>
                      <% } %>
                 </tr>
-            </form>
+
             <% } %>
         </table>
 

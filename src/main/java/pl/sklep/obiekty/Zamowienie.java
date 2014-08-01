@@ -58,4 +58,8 @@ public class Zamowienie {
     public ArrayList<Produkt> getKupioneProdukty() {
         return kupioneProdukty;
     }
+
+    public void setKupioneProdukty(ArrayList<Produkt> kupioneProdukty) {
+        this.kupioneProdukty = kupioneProdukty;
+    }
 }
