@@ -26,11 +26,13 @@
                   String id = produkt.getIdString();
                   String nazwa = produkt.getNazwa();
                   String kategoria = produkt.getKategoria();
-                  String cena = produkt.getCenaString();%>
+                  String cena = produkt.getCenaString();
+                  String ilosc = produkt.getIloscString();%>
             <tr>
                 <td><%= kategoria %></td>
                 <td><%=nazwa %></td>
                 <td><%= cena %></td>
+                <td><%="x"+ ilosc%></td>
             </tr>
 
             <% } %>

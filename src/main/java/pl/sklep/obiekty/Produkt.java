@@ -8,6 +8,7 @@ public class Produkt {
     private String nazwa;
     private int cena;
     private String kategoria;
+    private int ilosc;
 
     public Produkt(){
 
@@ -18,6 +19,7 @@ public class Produkt {
         this.kategoria = kategoria;
         this.nazwa = nazwa;
         this.cena = cena;
+        ilosc = 1;
     }
 
     public String getNazwa(){
@@ -54,6 +56,18 @@ public class Produkt {
 
     public String getKategoria() {
         return kategoria;
+    }
+
+    public void zwiekszIlosc(){
+        ilosc++;
+    }
+
+    public int getIlosc() {
+        return ilosc;
+    }
+
+    public String getIloscString(){
+        return Integer.toString(ilosc);
     }
 
     public void setKategoria(String kategoria) {

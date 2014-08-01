@@ -50,22 +50,71 @@ public class CartServlet extends HttpServlet {
 
 
             int id_koszyka = (Integer) sesja.getAttribute("id_koszyka");
+
             String query = "INSERT INTO public.koszyk_produkt (id_koszyka, id_produktu)" +
                     "VALUES ('" + id_koszyka + "', '" + id + "');";
 
             Produkt prod = new Produkt(id, nazwa, kategoria, cena);
-            koszyk.add(prod);
+
+
             try {
                 bazaDanych.dodajRekord(query);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            int iloscProduktow = iloscDanegoProduktu(bazaDanych, id, id_koszyka);
+
+            if (iloscProduktow == 1) {
+                koszyk.add(prod);
+            }
+            else{
+                zwiekszIloscProduktu(id, koszyk);
+            }
+
 
             req.getRequestDispatcher("kat").forward(req, resp);
         }
         else{
             req.getRequestDispatcher("wylogowanie").forward(req,resp);
         }
+    }
+
+    private void zwiekszIloscProduktu(int id, ArrayList<Produkt> koszyk){
+        for (int i = 0; i < koszyk.size(); i++){
+            if (id == koszyk.get(i).getId()){
+                koszyk.get(i).zwiekszIlosc();
+            }
+        }
+    }
+
+    private int iloscDanegoProduktu(DataBaseControl dbc, int id, int id_koszyka){
+        String iloscProduktowQuery = "SELECT \n" +
+                "  count(*) as ilosc\n" +
+                "FROM \n" +
+                "  public.koszyk_produkt, \n" +
+                "  public.produkty\n" +
+                "WHERE \n" +
+                "  koszyk_produkt.id_produktu = produkty.id_produktu AND\n" +
+                "  id_koszyka = " + id_koszyka + " AND\n" +
+                "  produkty.id_produktu = " + id + ";";
+
+        ResultSet wynik = null;
+
+        try {
+            wynik = dbc.zapytanie(iloscProduktowQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        int ilosc = 0;
+        try {
+            if (wynik.next()) {
+                ilosc = wynik.getInt("ilosc");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ilosc;
     }
 
     private void stworzNowyKoszyk(DataBaseControl dbc, HttpServletRequest req, HttpServletResponse resp) {

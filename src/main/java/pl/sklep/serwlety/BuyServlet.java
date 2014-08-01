@@ -122,53 +122,31 @@ public class BuyServlet extends HttpServlet {
 
         Map<Integer, ArrayList<Produkt>> categoryToProductMap = new HashMap<Integer, ArrayList<Produkt>>();
        while(listaProduktow.next()){
-            int id = listaProduktow.getInt("id_zamowienia");
-            ArrayList<Produkt> produktList = categoryToProductMap.get(id);
+            int id_zamowienia = listaProduktow.getInt("id_zamowienia");
+            ArrayList<Produkt> produktList = categoryToProductMap.get(id_zamowienia);
             if (produktList == null) {
                 produktList = new ArrayList<Produkt>();
-                categoryToProductMap.put(id, produktList);
+                categoryToProductMap.put(id_zamowienia, produktList);
             }
 
             Produkt produkt = new Produkt(listaProduktow.getInt("id_produktu"),
                     listaProduktow.getString("nazwa_produktu"),
                     listaProduktow.getString("nazwa_kategorii"), listaProduktow.getInt("cena"));
             // Read produkt from database record here
+            //dodajProduktDoListy(produkt, produktList);
             produktList.add(produkt);
         }
 
         return categoryToProductMap;
-//        // Iterujemy po zamowieniach
-//        for () {
-//            List<Produkt> produktList = categoryToProductMap.get(id_zamowienia);
-//            // Dodaj liste produktow pod zamowienie
-//        }
-//
-//        while(listaProduktow.next()){
-//
-//
-//
-////            try {
-////                PrintWriter pw = resp.getWriter();
-////                pw.println(id_zamowienia + " " + id);
-////            } catch (IOException e) {
-////                e.printStackTrace();
-////            }
-//
-//            if (id_zamowienia == id)
-//
-//        }
-//        try {
-//            //listaProduktow.beforeFirst();
-//            listaProduktow.previous();
-//        }catch (SQLException ex){
-//            try {
-//                PrintWriter pw = resp.getWriter();
-//                pw.println("blad :< before first");
-//            }catch(IOException io){
-//
-//            }
-//        }
     }
+
+    /*private void dodajProduktDoListy(Produkt prod, ArrayList<Produkt> lista){
+        int id_prod = prod.getId();
+
+        for (int i = 0; i < lista.size();i++){
+
+        }
+    }*/
 
     private int stworzZamowienie(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException{
