@@ -18,47 +18,34 @@
 
         <% ArrayList<Zamowienie> zam = (ArrayList<Zamowienie>) session.getAttribute("zamowienia");
         %>
-        <table>
-            <%
-            if (zam.size() > 0){ for (int i = 0; i < zam.size(); i++){
-                  Zamowienie zamowienie = (Zamowienie) zam.get(i);
-                  String id = zamowienie.getIdString();
-                  String data = zamowienie.getData();
-                  String adres = zamowienie.getAdres();
-                  ArrayList<Produkt> produkty = zamowienie.getKupioneProdukty();
-            %>
-            <tr>
-                <td><%= id %></td>
-                <td><%= data %></td>
-                <td><%= adres %></td>
-            </tr>
-            <tr>
-                <table>
-                    <% for (int j = 0; j < produkty.size(); j++){ %>
-                        <tr>
-                            <td><%= produkty.get(j).getKategoria() %></td>
-                            <td><%= produkty.get(j).getNazwa() %></td>
-                            <td><%= produkty.get(j).getCena() %></td>
-                        </tr>
-                    <% } %>
-                </table>
-            </tr>
+        <%if (zam.size() > 0){%>
+            
+                <% for (int i = 0; i < zam.size(); i++){
+                    Zamowienie zamowienie = (Zamowienie) zam.get(i);
+                    String id = zamowienie.getIdString();
+                    String data = zamowienie.getData();
+                    String adres = zamowienie.getAdres();
+                    ArrayList<Produkt> produkty = zamowienie.getKupioneProdukty();
+                %>
+                
+                    <h4><%= id + " " %><%= data + " "%><%= adres %></h4>
+                    <p>
+                        <% for (int j = 0; j < produkty.size(); j++){ %>
+                            <%= produkty.get(j).getKategoria() + " "%> <%= produkty.get(j).getNazwa() + " "%>
+                                        <%= produkty.get(j).getCena() %>
+                            <br />
+                        <%}%>
+                    </p>
 
             <% } %>
-            <!-- <tr>
-                <td>
-                    <form action="zamowienia">
-                        <button type="submit" name="subBuyServ" value="wyswietl">Kup</button>
-                    </form>
-                </td>
-            </tr> -->
+            
             <%}else {%>
-            <tr>
-                <td>Nie masz jeszcze zadnych zrealizowanych zamowien :< :< :< </td>
-            </tr>
+            
+                <p>Nie masz jeszcze zadnych zrealizowanych zamowien :< :< :<</p>
+            
             <% } %>
-        </table>
         <a href="form">glowna</a>
+        
     </div>
 </body>
 </html>
