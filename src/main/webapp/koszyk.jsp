@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import=" java.util.ArrayList" %>
+    <%@ page import="pl.sklep.obiekty.Koszyk" %>
     <%@ page import="pl.sklep.obiekty.Produkt" %>
 
     <% if (session.getAttribute("login") == null) response.sendRedirect("form"); %>
@@ -15,14 +15,14 @@
     <div align="center">
         <h1>Twoj koszyk</h1>
 
-        <% ArrayList<Produkt> prod = (ArrayList<Produkt>) session.getAttribute("koszyk");
+        <% Koszyk kosz = (Koszyk) session.getAttribute("koszyk");
 
 
         %>
         <table>
             <%
-            if (prod != null){ for (int i = 0; i < prod.size(); i++){
-                  Produkt produkt = (Produkt) prod.get(i);
+            if (kosz != null){ for (int i = 0; i < kosz.size(); i++){
+                  Produkt produkt = (Produkt) kosz.get(i);
                   String id = produkt.getIdString();
                   String nazwa = produkt.getNazwa();
                   String kategoria = produkt.getKategoria();

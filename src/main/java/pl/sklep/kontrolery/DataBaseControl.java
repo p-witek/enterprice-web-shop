@@ -44,7 +44,7 @@ public class DataBaseControl {
         return st.executeQuery(query);
     }
 
-    public void dodajRekord(String query) throws SQLException {
+    public void aktualizujRekord(String query) throws SQLException {
         st = polaczenie.createStatement();
         st.executeUpdate(query);
     }

@@ -1,6 +1,7 @@
 package pl.sklep.serwlety;
 
 import pl.sklep.kontrolery.DataBaseControl;
+import pl.sklep.obiekty.Koszyk;
 import pl.sklep.obiekty.Produkt;
 import pl.sklep.obiekty.Zamowienie;
 
@@ -28,11 +29,12 @@ public class BuyServlet extends HttpServlet {
         if (wybor.equals("kup")) {
             int id_zamowienia = stworzZamowienie(req, resp);
             aktualizujKoszyk(req, resp, id_zamowienia);
-            przygotujZamowienia(req, resp);
         }
-        else if (wybor.equals("wyswietl")){
-            przygotujZamowienia(req, resp);
-        }
+//        else if (wybor.equals("wyswietl")){
+//            przygotujZamowienia(req, resp);
+//        }
+
+        przygotujZamowienia(req, resp);
 
         req.getRequestDispatcher("zamowienia.jsp").forward(req,resp);
     }
@@ -183,13 +185,13 @@ public class BuyServlet extends HttpServlet {
 
     private void aktualizujKoszyk(HttpServletRequest req, HttpServletResponse resp, int id_zamowienia) throws ServletException, IOException{
         DataBaseControl dbc = polaczZBaza(resp.getWriter());
+        Koszyk koszyk = (Koszyk) req.getSession().getAttribute("koszyk");
         String koszykUpdate = "UPDATE public.\"Koszyk\"\n" +
                 "SET id_zamowienia = " + id_zamowienia + "\n" +
-                "WHERE id_koszyka = "+ req.getSession().getAttribute("id_koszyka")+";";
+                "WHERE id_koszyka = "+ koszyk.getId() +";";
 
         try {
-            dbc.dodajRekord(koszykUpdate);
-            req.getSession().removeAttribute("id_koszyka");
+            dbc.aktualizujRekord(koszykUpdate);
             req.getSession().removeAttribute("koszyk");
         } catch (SQLException e) {
             e.printStackTrace();

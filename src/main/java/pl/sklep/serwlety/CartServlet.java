@@ -1,6 +1,7 @@
 package pl.sklep.serwlety;
 
 import pl.sklep.kontrolery.DataBaseControl;
+import pl.sklep.obiekty.Koszyk;
 import pl.sklep.obiekty.Produkt;
 
 import javax.servlet.ServletException;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Created by piotr on 25.07.14.
@@ -34,42 +34,33 @@ public class CartServlet extends HttpServlet {
         HttpSession sesja = req.getSession();
 
         if (sesja.getAttribute("login") != null ){
-            ArrayList<Produkt> koszyk = (ArrayList<Produkt>) sesja.getAttribute("koszyk");
-
-
+            Koszyk koszyk = (Koszyk) sesja.getAttribute("koszyk");
 
             if (koszyk == null){
-                koszyk = new ArrayList<Produkt>();
-                sesja.setAttribute("koszyk", koszyk);
+                koszyk = new Koszyk();
                 stworzNowyKoszyk( bazaDanych, req, resp);
-                sesja.setAttribute("id_koszyka", znajdzIdKoszyka(bazaDanych, req));
-
-//                PrintWriter pw = resp.getWriter();
-//                pw.print("siema eniu");
+                koszyk.setId(znajdzIdKoszyka(bazaDanych, req));
+                sesja.setAttribute("koszyk", koszyk);
             }
 
+//            String query = "INSERT INTO public.koszyk_produkt (id_koszyka, id_produktu, ilosc)" +
+//                    "VALUES ('" + id_koszyka + "', '" + id + "', 1);";
 
-            int id_koszyka = (Integer) sesja.getAttribute("id_koszyka");
-
-            String query = "INSERT INTO public.koszyk_produkt (id_koszyka, id_produktu)" +
-                    "VALUES ('" + id_koszyka + "', '" + id + "');";
-
-            Produkt prod = new Produkt(id, nazwa, kategoria, cena);
-
+            Produkt prod = null;
+            for (int i = 0; i < koszyk.size();i++){
+                if (id == koszyk.get(i).getId()){
+                    prod = koszyk.get(i);
+                }
+            }
+            if (prod == null) prod = new Produkt(id, nazwa, kategoria, cena);
 
             try {
-                bazaDanych.dodajRekord(query);
+                aktualizujKoszyk(bazaDanych, koszyk, prod, resp.getWriter());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            int iloscProduktow = iloscDanegoProduktu(bazaDanych, id, id_koszyka);
 
-            if (iloscProduktow == 1) {
-                koszyk.add(prod);
-            }
-            else{
-                zwiekszIloscProduktu(id, koszyk);
-            }
+            //resp.getWriter().print("ilosc: " + prod.getIlosc());
 
 
             req.getRequestDispatcher("kat").forward(req, resp);
@@ -79,36 +70,69 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-    private void zwiekszIloscProduktu(int id, ArrayList<Produkt> koszyk){
-        for (int i = 0; i < koszyk.size(); i++){
-            if (id == koszyk.get(i).getId()){
-                koszyk.get(i).zwiekszIlosc();
-            }
+
+    private void aktualizujKoszyk(DataBaseControl dbc ,Koszyk koszyk, Produkt prod, PrintWriter pw) throws SQLException{
+        String dodajPierwszyProdukt = "INSERT INTO public.koszyk_produkt (id_koszyka, id_produktu, ilosc)" +
+                "VALUES ('" + koszyk.getId() + "', '" + prod.getId() + "', 1);";
+
+        String wyszukajProduktu = "SELECT \n" +
+                "  koszyk_produkt.id_koszyka, \n" +
+                "  koszyk_produkt.id_produktu\n" +
+                "FROM \n" +
+                "  public.koszyk_produkt\n" +
+                "  WHERE\n" +
+                "  id_koszyka = " + koszyk.getId() + " AND\n" +
+                "  id_produktu = " + prod.getId() + ";";
+
+        int iloscDanegoProduktu = iloscDanegoProduktu(dbc, prod.getId(), koszyk.getId(), pw) + 1;
+
+       // pw.print(iloscDanegoProduktu);
+
+        String aktualizujIlosc= "UPDATE public.koszyk_produkt\n" +
+                "SET ilosc = "+ iloscDanegoProduktu +"\n" +
+                "WHERE id_koszyka = " + koszyk.getId() + " AND id_produktu = " + prod.getId() + ";";
+
+        ResultSet wyszukaneProdukty = dbc.zapytanie(wyszukajProduktu);
+
+        if(wyszukaneProdukty.next()){
+            dbc.aktualizujRekord(aktualizujIlosc);
+            prod.setIlosc(iloscDanegoProduktu);
         }
+        else{
+            dbc.aktualizujRekord(dodajPierwszyProdukt);
+            koszyk.add(prod);
+        }
+
     }
 
-    private int iloscDanegoProduktu(DataBaseControl dbc, int id, int id_koszyka){
+//    private void zwiekszIloscProduktu(int id, Koszyk koszyk){
+//        for (int i = 0; i < koszyk.size(); i++){
+//            if (id == koszyk.get(i).getId()){
+//                koszyk.get(i).zwiekszIlosc();
+//            }
+//        }
+//    }
+
+    private int iloscDanegoProduktu(DataBaseControl dbc, int id, int id_koszyka, PrintWriter pw){
         String iloscProduktowQuery = "SELECT \n" +
-                "  count(*) as ilosc\n" +
+                "  ilosc\n" +
                 "FROM \n" +
-                "  public.koszyk_produkt, \n" +
-                "  public.produkty\n" +
+                "  public.koszyk_produkt \n" +
                 "WHERE \n" +
-                "  koszyk_produkt.id_produktu = produkty.id_produktu AND\n" +
                 "  id_koszyka = " + id_koszyka + " AND\n" +
-                "  produkty.id_produktu = " + id + ";";
+                "  id_produktu = " + id + ";";
 
         ResultSet wynik = null;
 
         try {
             wynik = dbc.zapytanie(iloscProduktowQuery);
         } catch (SQLException e) {
-            e.printStackTrace();
+            //pw.print("siema eniu!!!");
         }
 
         int ilosc = 0;
         try {
-            if (wynik.next()) {
+            if (wynik.next()){
                 ilosc = wynik.getInt("ilosc");
             }
         } catch (SQLException e) {
@@ -123,7 +147,7 @@ public class CartServlet extends HttpServlet {
         String queryDodajKoszyk = "INSERT INTO public.\"Koszyk\" (id_usera) VALUES (" + id_usera + ")";
 
         try {
-            dbc.dodajRekord(queryDodajKoszyk);
+            dbc.aktualizujRekord(queryDodajKoszyk);
         } catch (SQLException e) {
             e.printStackTrace();
         }

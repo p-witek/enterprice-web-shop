@@ -21,6 +21,14 @@ public class Produkt {
         this.cena = cena;
         ilosc = 1;
     }
+    public Produkt(int id, String nazwa, String kategoria, int cena, int ilosc){
+        this.id = id;
+        this.kategoria = kategoria;
+        this.nazwa = nazwa;
+        this.cena = cena;
+        this.ilosc = ilosc;
+    }
+
 
     public String getNazwa(){
         return nazwa;
@@ -58,8 +66,8 @@ public class Produkt {
         return kategoria;
     }
 
-    public void zwiekszIlosc(){
-        ilosc++;
+    public void setIlosc(int ilosc){
+        this.ilosc = ilosc;
     }
 
     public int getIlosc() {
