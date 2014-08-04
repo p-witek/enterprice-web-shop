@@ -58,27 +58,28 @@ public class BuyServlet extends HttpServlet {
                 "  \"user\".login = '" + login + "'" +
                 "ORDER BY id_zamowienia ASC;";
 
-        String produktyQuery = "SELECT \n" +
-                "  produkty.id_produktu," +
-                "  produkty.nazwa AS nazwa_produktu, \n" +
-                "  produkty.cena, \n" +
-                "  kategorie.nazwa AS nazwa_kategorii, \n" +
-                "  \"Zamowienie\".id_zamowienia\n" +
-                "FROM \n" +
-                "  public.\"Koszyk\", \n" +
-                "  public.\"Zamowienie\", \n" +
-                "  public.koszyk_produkt, \n" +
-                "  public.produkty, \n" +
-                "  public.kategorie, \n" +
-                "  public.\"user\"\n" +
-                "WHERE \n" +
-                "  \"Zamowienie\".id_zamowienia = \"Koszyk\".id_zamowienia AND\n" +
-                "  koszyk_produkt.id_koszyka = \"Koszyk\".id_koszyka AND\n" +
-                "  produkty.id_produktu = koszyk_produkt.id_produktu AND\n" +
-                "  kategorie.id_kategorii = produkty.id_kategorii AND\n" +
-                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
-                "  \"user\".login = '"+login +"'" +
-                "  ORDER BY id_zamowienia ASC;";
+        String produktyQuery = "SELECT\n" +
+                "produkty.id_produktu,\n" +
+                "produkty.nazwa AS nazwa_produktu,\n" +
+                "produkty.cena,\n" +
+                "kategorie.nazwa AS nazwa_kategorii,\n" +
+                "\"Zamowienie\".id_zamowienia,\n" +
+                "koszyk_produkt.ilosc\n" +
+                "FROM\n" +
+                "public.\"Koszyk\",\n" +
+                "public.\"Zamowienie\",\n" +
+                "public.koszyk_produkt,\n" +
+                "public.produkty,\n" +
+                "public.kategorie,\n" +
+                "public.\"user\"\n" +
+                "WHERE\n" +
+                "\"Zamowienie\".id_zamowienia = \"Koszyk\".id_zamowienia AND\n" +
+                "koszyk_produkt.id_koszyka = \"Koszyk\".id_koszyka AND\n" +
+                "produkty.id_produktu = koszyk_produkt.id_produktu AND\n" +
+                "kategorie.id_kategorii = produkty.id_kategorii AND\n" +
+                "\"user\".id_usera = \"Koszyk\".id_usera AND\n" +
+                "\"user\".login = '"+login+"'\n" +
+                "ORDER BY id_zamowienia ASC;";
 
         ResultSet listaZamowien = null;
         ResultSet listaProduktow = null;
@@ -92,7 +93,7 @@ public class BuyServlet extends HttpServlet {
         try {
             listaProduktow = dbc.zapytanie(produktyQuery);
         } catch (SQLException e) {
-            e.printStackTrace();
+            resp.getWriter().println("siema eniu!!!");
         }
 
         Map<Integer, ArrayList<Produkt>> mapaProduktow = null;
@@ -133,7 +134,8 @@ public class BuyServlet extends HttpServlet {
 
             Produkt produkt = new Produkt(listaProduktow.getInt("id_produktu"),
                     listaProduktow.getString("nazwa_produktu"),
-                    listaProduktow.getString("nazwa_kategorii"), listaProduktow.getInt("cena"));
+                    listaProduktow.getString("nazwa_kategorii"), listaProduktow.getInt("cena"),
+                    listaProduktow.getInt("ilosc"));
             // Read produkt from database record here
             //dodajProduktDoListy(produkt, produktList);
             produktList.add(produkt);

@@ -42,10 +42,17 @@ public class LoginServlet extends HttpServlet {
 
             przygotujKategorie(bazaDanych, req, resp);
 
-            int idKoszyka = znajdzIdKoszyka(bazaDanych, req, resp);
-            if (idKoszyka != -1) {
-                przygotujKoszyk(bazaDanych, req, resp, idKoszyka);
+            String login = (String) req.getSession().getAttribute("login");
+            Koszyk koszyk = new Koszyk();
+            koszyk.przygotuj(bazaDanych, login);
+
+            if (koszyk.czyIstnieje()){
+                req.getSession().setAttribute("koszyk", koszyk);
             }
+//            int idKoszyka = znajdzIdKoszyka(bazaDanych, req, resp);
+//            if (idKoszyka != -1) {
+//                przygotujKoszyk(bazaDanych, req, resp, idKoszyka);
+//            }
 
             resp.sendRedirect("form");
         }
@@ -63,93 +70,94 @@ public class LoginServlet extends HttpServlet {
 
 
 
-    private int znajdzIdKoszyka(DataBaseControl dbc, HttpServletRequest req,
-                                HttpServletResponse resp) {
-        String login = (String) req.getSession().getAttribute("login");
+//    private int znajdzIdKoszyka(DataBaseControl dbc, HttpServletRequest req,
+//                                HttpServletResponse resp) {
+//        String login = (String) req.getSession().getAttribute("login");
+//
+//        String query = "SELECT \n" +
+//                "  id_koszyka \n" +
+//                "FROM \n" +
+//                "  public.\"user\", \n" +
+//                "  public.\"Koszyk\"\n" +
+//                "WHERE \n" +
+//                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
+//                "  \"user\".login = '" + login + "' AND\n" +
+//                "  \"Koszyk\".id_zamowienia is NULL\n";
+//
+//        ResultSet wynik = null;
+//
+//        try {
+//            wynik = dbc.zapytanie(query);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        int idKoszyka = -1;
+//        //boolean czyIstniejeKosz = false;
+//        try {
+//            //czyIstniejeKosz = wynik.next();
+//            if (wynik.next()){
+//                idKoszyka = wynik.getInt("id_koszyka");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return idKoszyka;
+//    }
 
-        String query = "SELECT \n" +
-                "  id_koszyka \n" +
-                "FROM \n" +
-                "  public.\"user\", \n" +
-                "  public.\"Koszyk\"\n" +
-                "WHERE \n" +
-                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
-                "  \"user\".login = '" + login + "' AND\n" +
-                "  \"Koszyk\".id_zamowienia is NULL\n";
-
-        ResultSet wynik = null;
-
-        try {
-            wynik = dbc.zapytanie(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        int idKoszyka = -1;
-        //boolean czyIstniejeKosz = false;
-        try {
-            //czyIstniejeKosz = wynik.next();
-            if (wynik.next()){
-                idKoszyka = wynik.getInt("id_koszyka");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return idKoszyka;
-    }
-
-    private void przygotujKoszyk(DataBaseControl dbc, HttpServletRequest req,
-                                    HttpServletResponse resp, int idKoszyka) {
-        Koszyk koszyk = new Koszyk();
-        koszyk.setId(idKoszyka);
-        String login = req.getParameter("login");
-        String query = "SELECT \n" +
-                "  produkty.nazwa as nazwa_produktu, \n" +
-                "  produkty.cena, \n" +
-                "  kategorie.nazwa as nazwa_kat,\n" +
-                "  produkty.id_produktu,\n" +
-                "  koszyk_produkt.ilosc\n" +
-                "FROM \n" +
-                "  public.produkty, \n" +
-                "  public.koszyk_produkt, \n" +
-                "  public.\"Koszyk\", \n" +
-                "  public.\"user\", \n" +
-                "  public.kategorie\n" +
-                "WHERE \n" +
-                "  \"user\".login = '" + login + "' AND" +
-                "  koszyk_produkt.id_koszyka = \"Koszyk\".id_koszyka AND\n" +
-                "  koszyk_produkt.id_produktu = produkty.id_produktu AND\n" +
-                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
-                "  kategorie.id_kategorii = produkty.id_kategorii AND" +
-                "  koszyk_produkt.id_koszyka = " + koszyk.getId() + ";";
-
-        ResultSet wynik = null;
-
-        try {
-            wynik = dbc.zapytanie(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            while(wynik.next()){
-                koszyk.add(new Produkt(wynik.getInt("id_produktu"), wynik.getString("nazwa_produktu"),
-                        wynik.getString("nazwa_kat"), wynik.getInt("cena"),wynik.getInt("ilosc")));
-            }
-        } catch (SQLException e) {
-
-            try {
-                PrintWriter pw = resp.getWriter();
-                pw.print("blad z dodaniem do koszyka");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-
-        req.getSession().setAttribute("koszyk", koszyk);
-    }
+//    private void przygotujKoszyk(DataBaseControl dbc, HttpServletRequest req,
+//                                    HttpServletResponse resp) {
+//        Koszyk koszyk = new Koszyk();
+//        znajdzIdKoszyka(dbc, req, resp);
+//        //koszyk.setId(idKoszyka);
+//        String login = req.getParameter("login");
+//        String query = "SELECT \n" +
+//                "  produkty.nazwa as nazwa_produktu, \n" +
+//                "  produkty.cena, \n" +
+//                "  kategorie.nazwa as nazwa_kat,\n" +
+//                "  produkty.id_produktu,\n" +
+//                "  koszyk_produkt.ilosc\n" +
+//                "FROM \n" +
+//                "  public.produkty, \n" +
+//                "  public.koszyk_produkt, \n" +
+//                "  public.\"Koszyk\", \n" +
+//                "  public.\"user\", \n" +
+//                "  public.kategorie\n" +
+//                "WHERE \n" +
+//                "  \"user\".login = '" + login + "' AND" +
+//                "  koszyk_produkt.id_koszyka = \"Koszyk\".id_koszyka AND\n" +
+//                "  koszyk_produkt.id_produktu = produkty.id_produktu AND\n" +
+//                "  \"user\".id_usera = \"Koszyk\".id_usera AND\n" +
+//                "  kategorie.id_kategorii = produkty.id_kategorii AND" +
+//                "  koszyk_produkt.id_koszyka = " + koszyk.getId() + ";";
+//
+//        ResultSet wynik = null;
+//
+//        try {
+//            wynik = dbc.zapytanie(query);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            while(wynik.next()){
+//                koszyk.add(new Produkt(wynik.getInt("id_produktu"), wynik.getString("nazwa_produktu"),
+//                        wynik.getString("nazwa_kat"), wynik.getInt("cena"),wynik.getInt("ilosc")));
+//            }
+//        } catch (SQLException e) {
+//
+//            try {
+//                PrintWriter pw = resp.getWriter();
+//                pw.print("blad z dodaniem do koszyka");
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//
+//        }
+//
+//        req.getSession().setAttribute("koszyk", koszyk);
+//    }
 
 
     private void przygotujKategorie(DataBaseControl dbc, HttpServletRequest req,

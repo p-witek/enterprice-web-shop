@@ -32,7 +32,7 @@
                     <p>
                         <% for (int j = 0; j < produkty.size(); j++){ %>
                             <%= produkty.get(j).getKategoria() + " "%> <%= produkty.get(j).getNazwa() + " "%>
-                                        <%= produkty.get(j).getCena() %>
+                                        <%= produkty.get(j).getCena() %> <%="x"+ produkty.get(j).getIlosc() %>
                             <br />
                         <%}%>
                     </p>
