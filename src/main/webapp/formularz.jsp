@@ -19,11 +19,10 @@ pageEncoding="ISO-8859-1"%>
                 </tr>
                 <tr>
                     <td>Haslo</td>
-                    <td><input type="password" name="haslo" /></td>
+                    <td><input type="password" name="password" /></td>
                 </tr>
             </table>
-                <button type="submit" name="wyslij" value="wyslij">Wyslij</button>
-                <!--<button type="submit" name="rejestracja" value="rejestracja">Rejestracja</button>-->
+                <button type="submit" name="send" value="send">Wyslij</button>
         </form>
     </div>
 </body>

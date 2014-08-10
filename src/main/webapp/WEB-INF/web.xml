@@ -43,6 +43,11 @@
         <servlet-class>pl.sklep.serwlety.BuyServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>ProdServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.ProdServlet</servlet-class>
+    </servlet>
+
     <!--Here we're defining URL mapping to each previously defined servlets-->
 
     <servlet-mapping>
@@ -73,6 +78,11 @@
     <servlet-mapping>
         <servlet-name>BuyServlet</servlet-name>
         <url-pattern>/zamowienia</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProdServlet</servlet-name>
+        <url-pattern>/prod</url-pattern>
     </servlet-mapping>
 
 </web-app>

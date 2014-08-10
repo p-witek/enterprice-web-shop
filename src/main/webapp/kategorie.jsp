@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import=" java.util.*" %>
-    <%@ page import="pl.sklep.obiekty.Produkt" %>
-    <% if (session.getAttribute("login") == null) response.sendRedirect("form"); %>
+    <%@ page import="pl.sklep.model.Category" %>
+    <%@ page import="pl.sklep.model.User" %>
+    <% if (session.getAttribute("user") == null) response.sendRedirect("form"); %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head lang="en">
@@ -12,27 +14,29 @@
 </head>
 <body>
     <div align="center">
-        <% String login = (String) request.getAttribute("login");%>
-        <p>Zalogowano jako <%= login%></p>
+        <% User user = (User) session.getAttribute("user");%>
+        <p>Zalogowano jako <%= user.getLogin()%></p>
         <h1>Siema Eniu!!!</h1>
 
-        <% HashSet<String> kategorie = (HashSet<String>) request.getAttribute("kategorie");%>
+        <% ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categories");%>
         <table>
-            <% Iterator it = kategorie.iterator();
+            <% Iterator it = categories.iterator();
                 while(it.hasNext()){
-                String next =(String) it.next();%>
+                Category category = (Category) it.next();
+                String name = category.getName();%>
 
                 <tr>
                     <td>
-                        <form action="kat">
-                            <input type="submit" class="kat" name="kategoria" value="<%= next %>" />
+                        <form action="prod">
+                            <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
                         </form>
                      </td>
                      <% if (it.hasNext()){
-                      next =(String) it.next();%>
+                      category = (Category) it.next();
+                      name = category.getName();%>
                      <td>
-                        <form action="kat">
-                          <input type="submit" class="kat" name="kategoria" value="<%= next %>" />
+                        <form action="prod">
+                          <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
                         </form>
 
                      </td>
@@ -50,8 +54,8 @@
                     </form>
                 </td>
                 <td>
-                    <form action="koszyk.jsp">
-                        <button type="submit" name="pokazKosz">Pokaz Koszyk</button>
+                    <form action="cart">
+                        <button type="submit" name="showCart">Pokaz Koszyk</button>
                     </form>
                 </td>
                 <td>

@@ -1,74 +1,108 @@
 package pl.sklep.serwlety;
 
-import pl.sklep.kontrolery.DataBaseControl;
-import pl.sklep.obiekty.Koszyk;
-import pl.sklep.obiekty.Produkt;
+import pl.sklep.DAO.DataBaseInterface;
+import pl.sklep.DAO.UserDAO;
+import pl.sklep.DAO.exceptions.DBException;
+import pl.sklep.DAO.exceptions.DBRecordNotFound;
+import pl.sklep.DAO.exceptions.JDBCDriverException;
+import pl.sklep.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
 
 /**
  * Created by piotr on 23.07.14.
  */
 public class LoginServlet extends HttpServlet {
-    HttpServletRequest req;
+    private DataBaseInterface baseInterface;
+    private UserDAO userDAO;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.req = req;
-        //HttpSession sesja = req.getSession();
         resp.setContentType("text/html");
         PrintWriter pw = resp.getWriter();
-        DataBaseControl bazaDanych = new DataBaseControl();
 
-        bazaDanych.zaladujSterownik("org.postgresql.Driver");
-        bazaDanych.ustawAdresSerwera("jdbc:postgresql://localhost/baza_sklep");
-        bazaDanych.zalogujUzytkownika("postgres", "Nabuchodonozor2");
-        polaczZBaza(bazaDanych, pw);
-        //pw.println("polaczono z baza");
-        boolean czyZalogowano = sprawdzUzytkownika(bazaDanych, pw, req);
+        // Init model
+        baseInterface = new DataBaseInterface();
+        userDAO = new UserDAO(baseInterface);
+//        categoryDAO = new CategoryDAO(baseInterface);
+        dataBaseConnect();
 
-        if (czyZalogowano){
-            //req.getRequestDispatcher("form");
-            //req.getSession().invalidate();
+        User loggedUser = checkUser(req.getParameter("login"), req.getParameter("password"));
+        if (loggedUser != null){
+            req.getSession().setAttribute("user", loggedUser);
+            //prepareCategories(req);
+            //req.setAttribute("login", loggedUser.getLogin());
+            req.getRequestDispatcher("kat").forward(req, resp);
 
-            przygotujKategorie(bazaDanych, req, resp);
+            //przygotujKategorie(baseInterface, req, resp);
 
-            String login = (String) req.getSession().getAttribute("login");
-            Koszyk koszyk = new Koszyk();
-            koszyk.przygotuj(bazaDanych, login);
+            //String login = (String) req.getSession().getAttribute("login");
+            //Koszyk koszyk = new Koszyk();
+            //koszyk.przygotuj(baseInterface, login);
 
-            if (koszyk.czyIstnieje()){
-                req.getSession().setAttribute("koszyk", koszyk);
-            }
-//            int idKoszyka = znajdzIdKoszyka(bazaDanych, req, resp);
-//            if (idKoszyka != -1) {
-//                przygotujKoszyk(bazaDanych, req, resp, idKoszyka);
+//            if (koszyk.czyIstnieje()){
+//                req.getSession().setAttribute("koszyk", koszyk);
 //            }
-
-            resp.sendRedirect("form");
+////            int idKoszyka = znajdzIdKoszyka(bazaDanych, req, resp);
+////            if (idKoszyka != -1) {
+////                przygotujKoszyk(bazaDanych, req, resp, idKoszyka);
+////            }
         }
         else{
-            pw.println("Podano nieprawidlowe dane. Zaraz nastąpi przekierowanie...");
-            try {
-                Thread.sleep(2000);
-                resp.sendRedirect("form");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            resp.sendRedirect("form");
         }
-        rozlaczZbaza(bazaDanych, pw);
+
+        try {
+            baseInterface.disconnect();
+        } catch (DBException e) {
+            System.out.println("Problem z rozlaczeniem bazy danych");
+        }
     }
 
+//    private void prepareCategories(HttpServletRequest req){
+//        try {
+//            req.setAttribute("categories", categoryDAO.getAllCategories());
+//        }catch (DBRecordNotFound e){
+//            System.out.println("W bazie nie ma kategorii!");
+//            e.printStackTrace();
+//        }
+//        catch (DBException e) {
+//            System.out.println("Bład przy pobieraniu danych z bazy");
+//            e.printStackTrace();
+//        }
+//    }
 
+    private User checkUser(String username, String password) {
+        try {
+            User user = userDAO.getUser(username);
+            if (user.getPassword().equals(password)){
+                return user;
+            }
+
+        } catch (DBRecordNotFound e) {
+            System.out.println("User not found!");
+            e.printStackTrace();
+        } catch (DBException e) {
+            System.out.println("Blad przy pobieraniu danych z bazy");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void dataBaseConnect(){
+        try {
+            baseInterface.connect();
+        } catch (JDBCDriverException e) {
+            System.out.println("Problem z wczytaniem sterownika");
+        } catch (DBException e) {
+            System.out.println("Blad z podlaczeniem do bazy danych");
+        }
+    }
 
 //    private int znajdzIdKoszyka(DataBaseControl dbc, HttpServletRequest req,
 //                                HttpServletResponse resp) {
@@ -87,7 +121,7 @@ public class LoginServlet extends HttpServlet {
 //        ResultSet wynik = null;
 //
 //        try {
-//            wynik = dbc.zapytanie(query);
+//            wynik = dbc.query(query);
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
@@ -135,7 +169,7 @@ public class LoginServlet extends HttpServlet {
 //        ResultSet wynik = null;
 //
 //        try {
-//            wynik = dbc.zapytanie(query);
+//            wynik = dbc.query(query);
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
@@ -160,112 +194,84 @@ public class LoginServlet extends HttpServlet {
 //    }
 
 
-    private void przygotujKategorie(DataBaseControl dbc, HttpServletRequest req,
-                                    HttpServletResponse resp) {
-        ArrayList<Produkt> produkty = new ArrayList<Produkt>();
-        HashSet<String> kategorie = new HashSet<String>();
-        //String query = "SELECT produkty.id_produktu, produkty.nazwa, produkty.cena " +
-         //       "FROM public.produkty;";
-        //String login = req.getParameter("login");
-//        String id_koszyka_query = "SELECT \n" +
-//                "  \"Koszyk\".id_koszyka\n" +
+//    private void przygotujKategorie(DataBaseInterface dbc, HttpServletRequest req,
+//                                    HttpServletResponse resp) {
+//        ArrayList<Produkt> produkty = new ArrayList<Produkt>();
+//        HashSet<String> kategorie = new HashSet<String>();
+//        //String query = "SELECT produkty.id_produktu, produkty.nazwa, produkty.cena " +
+//         //       "FROM public.produkty;";
+//        //String login = req.getParameter("login");
+////        String id_koszyka_query = "SELECT \n" +
+////                "  \"Koszyk\".id_koszyka\n" +
+////                "FROM \n" +
+////                "  public.\"Koszyk\", \n" +
+////                "  public.\"user\"\n" +
+////                "WHERE \n" +
+////                "  \"Koszyk\".id_usera = \"user\".id_usera\n" +
+////                "  AND \"user\".login = '" + login +"';";
+//
+//        String query2 = "SELECT \n" +
+//                "  kategorie.nazwa as nazwa_kategorii, \n" +
+//                "  produkty.id_produktu, \n" +
+//                "  produkty.nazwa as nazwa_produktu, \n" +
+//                "  produkty.cena\n" +
 //                "FROM \n" +
-//                "  public.\"Koszyk\", \n" +
-//                "  public.\"user\"\n" +
+//                "  public.kategorie, \n" +
+//                "  public.produkty\n" +
 //                "WHERE \n" +
-//                "  \"Koszyk\".id_usera = \"user\".id_usera\n" +
-//                "  AND \"user\".login = '" + login +"';";
-
-        String query2 = "SELECT \n" +
-                "  kategorie.nazwa as nazwa_kategorii, \n" +
-                "  produkty.id_produktu, \n" +
-                "  produkty.nazwa as nazwa_produktu, \n" +
-                "  produkty.cena\n" +
-                "FROM \n" +
-                "  public.kategorie, \n" +
-                "  public.produkty\n" +
-                "WHERE \n" +
-                "  kategorie.id_kategorii = produkty.id_kategorii;\n";
-
-        ResultSet wynik = null;
-        try {
-//            wynik = dbc.zapytanie(id_koszyka_query);
-//            if (wynik.next()){
-//                req.getSession().setAttribute("id_koszyka", wynik.getInt("id_koszyka"));
+//                "  kategorie.id_kategorii = produkty.id_kategorii;\n";
+//
+//        ResultSet wynik = null;
+//        try {
+////            wynik = dbc.query(id_koszyka_query);
+////            if (wynik.next()){
+////                req.getSession().setAttribute("id_koszyka", wynik.getInt("id_koszyka"));
+////            }
+//
+//            wynik = dbc.query(query2);
+//        } catch (SQLException e) {
+//            try {
+//                resp.getWriter().println("nie udalo sie wykonac zapytania");
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
 //            }
+//        }
+//
+//        try {
+//            while(wynik.next()) {
+//                String kat = wynik.getString("nazwa_kategorii");
+//                produkty.add(new Produkt(wynik.getInt("id_produktu"),
+//                        wynik.getString("nazwa_produktu"), kat,
+//                        wynik.getInt("cena")));
+//                kategorie.add(kat);
+//
+//            }
+//        } catch (SQLException e) {
+//            try {
+//                resp.getWriter().println("blad z dodawaniem uzytkownika");
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//        }
+//
+//        req.getSession().setAttribute("produkty", produkty);
+//        req.getSession().setAttribute("kategorie", kategorie);
+//    }
 
-            wynik = dbc.zapytanie(query2);
-        } catch (SQLException e) {
-            try {
-                resp.getWriter().println("nie udalo sie wykonac zapytania");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        try {
-            while(wynik.next()) {
-                String kat = wynik.getString("nazwa_kategorii");
-                produkty.add(new Produkt(wynik.getInt("id_produktu"),
-                        wynik.getString("nazwa_produktu"), kat,
-                        wynik.getInt("cena")));
-                kategorie.add(kat);
-
-            }
-        } catch (SQLException e) {
-            try {
-                resp.getWriter().println("blad z dodawaniem uzytkownika");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        req.getSession().setAttribute("produkty", produkty);
-        req.getSession().setAttribute("kategorie", kategorie);
-    }
-
-    private void polaczZBaza(DataBaseControl dbc, PrintWriter pw){
-        try {
-            dbc.polacz();
-        } catch (ClassNotFoundException e) {
-            pw.println("Blad z zaladowaniem sterownika");
-        } catch (SQLException e) {
-            pw.println("Nie polaczono z baza");
-        }
-    }
-    private void rozlaczZbaza(DataBaseControl dbc, PrintWriter pw){
-        try {
-            dbc.rozlacz();
-        } catch (SQLException e) {
-            pw.println("Blad z zamknieciem bazy");
-        }
-    }
-    private boolean sprawdzUzytkownika(DataBaseControl dbc, PrintWriter pw, HttpServletRequest req){
-        //pobranie uzytkownikow z bazy
-        ResultSet wynik = null;
-
-        try {
-
-            wynik = dbc.zapytanie("SELECT \"user\".login," +
-                    "\"user\".password FROM public.\"user\";");
-        } catch (SQLException e) {
-            pw.println("Blad zapytania");
-        }
-        //sprawdzanie czy istnieje uzytkownik do zalogowania
-        String login = req.getParameter("login");
-        String haslo = req.getParameter("haslo");
-        try {
-            while(wynik.next()){
-                String user = wynik.getString("login");
-                String password = wynik.getString("password");
-                if (user.equals(login) && password.equals(haslo)){
-                    req.getSession().setAttribute("login", user);
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            pw.println("Blad przy pobieraniu danych z bazy");
-        }
-        return false;
-    }
+//    private void polaczZBaza(DataBaseInterface dbc, PrintWriter pw){
+//        try {
+//            dbc.connect();
+//        } catch (ClassNotFoundException e) {
+//            pw.println("Blad z zaladowaniem sterownika");
+//        } catch (SQLException e) {
+//            pw.println("Nie polaczono z baza");
+//        }
+//    }
+//    private void rozlaczZbaza(DataBaseInterface dbc, PrintWriter pw){
+//        try {
+//            dbc.disconnect();
+//        } catch (SQLException e) {
+//            pw.println("Blad z zamknieciem bazy");
+//        }
+//    }
 }
