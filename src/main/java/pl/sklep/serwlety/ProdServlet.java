@@ -49,11 +49,7 @@ public class ProdServlet extends HttpServlet {
     private void prepareProducts(HttpServletRequest req){
         try {
             req.setAttribute(PRODUCTS_ATTRIBUTE_NAME, productDAO.getProducts(req.getParameter(NAME_SELECT_CAT_PARAM)));
-        }catch (DBRecordNotFound e){
-            System.out.println("Brak produktow w bazie");
-            e.printStackTrace();
-        }
-        catch (DBException e) {
+        }catch (DBException e) {
             System.out.println("Problem z zapytaniem do bazy");
             e.printStackTrace();
         }

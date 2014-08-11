@@ -3,10 +3,12 @@ package pl.sklep.DAO;
 import pl.sklep.DAO.exceptions.DBException;
 import pl.sklep.DAO.exceptions.DBRecordNotFound;
 import pl.sklep.model.Cart;
+import pl.sklep.model.Product;
 import pl.sklep.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by piotr on 05.08.14.
@@ -39,7 +41,7 @@ public class CartDAO {
             if (resultSet.next()) {
                 return fromDBResult(resultSet);
             }
-            throw new DBRecordNotFound();
+            return null;
         }catch (SQLException e){
             throw new DBException();
         }
@@ -77,9 +79,19 @@ public class CartDAO {
     private Cart fromDBResult(ResultSet resultSet) throws SQLException {
         Cart cart = new Cart();
         cart.setId_cart(resultSet.getInt(COL_ID_CART));
+        cart.setProducts(getCartProducts(resultSet.getInt(COL_ID_CART)));
         cart.setUser(getCartOwner(resultSet.getInt(COL_ID_USER)));
         cart.setOrder(null);
         return cart;
+    }
+
+    private ArrayList<Product> getCartProducts(int cart_id) throws SQLException {
+        try {
+            ProductDAO productDAO = new ProductDAO(mDataBaseInterface);
+            return productDAO.getProducts(cart_id);
+        }catch (DBException e) {
+            throw new SQLException();
+        }
     }
 
     private User getCartOwner(int id_user) throws SQLException {

@@ -20,6 +20,7 @@ import java.io.IOException;
 public class CartServlet extends HttpServlet {
     private static final String ID_PARAMETER_NAME = "toCart";
     private static final String SHOW_CART_PARAMETER = "showCart";
+    private static final String CART_PARAMETER_NAME = "cart";
 
     private DataBaseInterface mDataBaseInterface;
     private CartDAO cartDAO;
@@ -47,6 +48,7 @@ public class CartServlet extends HttpServlet {
         }
 
         if (req.getParameter(SHOW_CART_PARAMETER) != null){
+            prepareCartProducts(req);
             req.getRequestDispatcher("cart.jsp").forward(req, resp);
         }
 
@@ -54,6 +56,17 @@ public class CartServlet extends HttpServlet {
             mDataBaseInterface.disconnect();
         } catch (DBException e) {
             System.out.println("Problem z rozlaczeniem bazy.");
+            e.printStackTrace();
+        }
+    }
+
+    private void prepareCartProducts(HttpServletRequest req){
+        User loggedUser = (User) req.getSession().getAttribute("user");
+        try {
+            req.setAttribute(CART_PARAMETER_NAME, cartDAO.getUsersOpenCart(loggedUser.getId_user()));
+        }
+        catch (DBException e) {
+            System.out.println("Blad z baza danych");
             e.printStackTrace();
         }
     }

@@ -8,6 +8,7 @@ public class Product {
     private String name;
     private int price;
     private Category category;
+    private int amount;
 
     public int getId() {
         return id;
@@ -26,6 +27,15 @@ public class Product {
     }
     public int getPrice() {
         return price;
+    }
+    public int getAmount() {
+        return amount;
+    }
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+    public String getAmountString(){
+        return Integer.toString(amount);
     }
     public String getPriceString(){
         return Integer.toString(price);

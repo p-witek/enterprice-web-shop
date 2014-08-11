@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="pl.sklep.obiekty.Koszyk" %>
-    <%@ page import="pl.sklep.obiekty.Produkt" %>
+    <%@ page import="pl.sklep.model.Cart" %>
+    <%@ page import="pl.sklep.model.Product" %>
 
-    <% if (session.getAttribute("login") == null) response.sendRedirect("form"); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head lang="en">
@@ -15,24 +14,21 @@
     <div align="center">
         <h1>Twoj koszyk</h1>
 
-        <% Koszyk kosz = (Koszyk) session.getAttribute("koszyk");
-
-
-        %>
+        <% Cart cart = (Cart) request.getAttribute("cart"); %>
         <table>
             <%
-            if (kosz != null){ for (int i = 0; i < kosz.size(); i++){
-                  Produkt produkt = (Produkt) kosz.get(i);
-                  String id = produkt.getIdString();
-                  String nazwa = produkt.getNazwa();
-                  String kategoria = produkt.getKategoria();
-                  String cena = produkt.getCenaString();
-                  String ilosc = produkt.getIloscString();%>
+            if (cart != null){ for (int i = 0; i < cart.getProducts().size(); i++){
+                  Product product = (Product) cart.getProducts().get(i);
+                  String id = product.getIdString();
+                  String name = product.getName();
+                  String category = product.getCategory().getName();
+                  String price = product.getPriceString();
+                  String amount = product.getAmountString();%>
             <tr>
-                <td><%= kategoria %></td>
-                <td><%=nazwa %></td>
-                <td><%= cena %></td>
-                <td><%="x"+ ilosc%></td>
+                <td><%= category %></td>
+                <td><%= name %></td>
+                <td><%= price %></td>
+                <td><%="x"+ amount%></td>
             </tr>
 
             <% } %>
