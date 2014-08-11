@@ -1,27 +1,69 @@
-//package pl.sklep.serwlety;
-//
-//import pl.sklep.DAO.DataBaseInterface;
-//import pl.sklep.obiekty.Koszyk;
-//import pl.sklep.obiekty.Produkt;
-//import pl.sklep.obiekty.Zamowienie;
-//
-//import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.*;
-//
-///**
-//* Created by piotr on 30.07.14.
-//*/
-//public class BuyServlet extends HttpServlet {
-//
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+package pl.sklep.serwlety;
+
+import pl.sklep.DAO.CartDAO;
+import pl.sklep.DAO.DataBaseInterface;
+import pl.sklep.DAO.OrderDAO;
+import pl.sklep.DAO.exceptions.DBException;
+import pl.sklep.model.Cart;
+import pl.sklep.model.User;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+/**
+* Created by piotr on 30.07.14.
+*/
+public class BuyServlet extends HttpServlet {
+    private static final String BUY_PARAMETER_NAME = "buy";
+    private static final String TEMP_ADDRESS = "ulica";
+    private static final String SHOW_ORDERS_PARAM = "showOrders";
+    private static final String CARTS_ATTRIBUTE_NAME = "carts";
+
+    DataBaseInterface mDataBaseInterface;
+    OrderDAO orderDAO;
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        //init database model
+        mDataBaseInterface = new DataBaseInterface();
+        orderDAO = new OrderDAO(mDataBaseInterface);
+
+        try {
+            mDataBaseInterface.connect();
+        } catch (DBException e) {
+            System.out.println("Problem z podlaczeniem do bazy");
+            e.printStackTrace();
+        }
+
+        if (req.getParameter(BUY_PARAMETER_NAME) != null) {
+            try {
+                User loggedUser = (User) req.getSession().getAttribute("user");
+                CartDAO cartDAO = new CartDAO(mDataBaseInterface);
+                Cart cart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
+                orderDAO.createNewOrder(cart.getId_cart(),getCurrentDate(), TEMP_ADDRESS);
+            } catch (DBException e) {
+                e.printStackTrace();
+            }
+            req.getRequestDispatcher("kat").forward(req, resp);
+        }
+
+        if (req.getParameter(SHOW_ORDERS_PARAM) != null){
+            prepareOrdersToShow(req);
+            req.getRequestDispatcher("orders.jsp").forward(req, resp);
+        }
+
+        try {
+            mDataBaseInterface.disconnect();
+        } catch (DBException e) {
+            System.out.println("Problem z rozlaczeniem bazy");
+            e.printStackTrace();
+        }
 //        String wybor = req.getParameter("subBuyServ");
 //
 //        PrintWriter pw = resp.getWriter();
@@ -36,9 +78,26 @@
 //
 //        przygotujZamowienia(req, resp);
 //
-//        req.getRequestDispatcher("zamowienia.jsp").forward(req,resp);
-//    }
-//
+//        req.getRequestDispatcher("orders.jsp").forward(req,resp);
+    }
+
+    private String getCurrentDate(){
+        Calendar kalendarz = Calendar.getInstance();
+        return kalendarz.get(Calendar.YEAR) + "-" + (kalendarz.get(Calendar.MONTH) + 1)
+                + "-" + kalendarz.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void prepareOrdersToShow(HttpServletRequest req){
+        CartDAO cartDAO = new CartDAO(mDataBaseInterface);
+        User user = (User) req.getSession().getAttribute("user");
+        try {
+            ArrayList<Cart> carts = cartDAO.getCartsWithOrder(user.getId_user());
+            req.setAttribute(CARTS_ATTRIBUTE_NAME, carts);
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    private void przygotujZamowienia(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 //        DataBaseInterface dbc = polaczZBaza(resp.getWriter());
 //        ArrayList<Zamowienie> zamowienia = new ArrayList<Zamowienie>();
@@ -179,11 +238,6 @@
 //
 //    }
 //
-//    private String aktualnaData(){
-//        Calendar kalendarz = Calendar.getInstance();
-//        return kalendarz.get(Calendar.YEAR) + "-" + (kalendarz.get(Calendar.MONTH) + 1)
-//                + "-" + kalendarz.get(Calendar.DAY_OF_MONTH);
-//    }
 //
 //    private void aktualizujKoszyk(HttpServletRequest req, HttpServletResponse resp, int id_zamowienia) throws ServletException, IOException{
 //        DataBaseInterface dbc = polaczZBaza(resp.getWriter());
@@ -215,4 +269,4 @@
 //
 //        return dbc;
 //    }
-//}
+}

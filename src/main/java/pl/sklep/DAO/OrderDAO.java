@@ -14,6 +14,10 @@ public class OrderDAO {
     private DataBaseInterface mDataBaseInterface;
 
     private static final String SELECT_BY_ID = "select * from public.orders where id_order = %d";
+    private static final String INSERT_NEW_ORDER = "with getIdOrder as (\n" +
+            "INSERT INTO public.orders (date, address) VALUES ('%s', '%s') RETURNING id_order\n" +
+            ") UPDATE public.carts SET id_order = (select id_order from getIdOrder) WHERE id_cart = %d;";
+
     private static final String COL_ID_ORDER = "id_order";
     private static final String COL_ADDRESS = "address";
     private static final String COL_DATE = "date";
@@ -30,6 +34,14 @@ public class OrderDAO {
             }
             throw new DBRecordNotFound();
         }catch(SQLException e){
+            throw new DBException();
+        }
+    }
+
+    public void createNewOrder(int id_cart, String date, String address) throws DBException {
+        try {
+            mDataBaseInterface.update(String.format(INSERT_NEW_ORDER, date, address, id_cart));
+        } catch (SQLException e) {
             throw new DBException();
         }
     }

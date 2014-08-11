@@ -75,16 +75,19 @@ public class CartServlet extends HttpServlet {
         User loggedUser = (User) req.getSession().getAttribute("user");
         try {
             Cart openCart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
-            int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
-            cartDAO.addProductToCart(product_id, openCart.getId_cart());
-        }catch (DBRecordNotFound e){
-            try {
-                int idOpenCart = cartDAO.createNewCart(loggedUser.getId_user());
+            if (openCart == null){
+                try {
+                    int idOpenCart = cartDAO.createNewCart(loggedUser.getId_user());
+                    int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
+                    cartDAO.addProductToCart(product_id, idOpenCart);
+                } catch (DBException e1) {
+                    System.out.println("Problem z baza danych");
+                    e1.printStackTrace();
+                }
+            }
+            else {
                 int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
-                cartDAO.addProductToCart(product_id, idOpenCart);
-            } catch (DBException e1) {
-                System.out.println("Problem z baza danych");
-                e1.printStackTrace();
+                cartDAO.addProductToCart(product_id, openCart.getId_cart());
             }
         }
         catch (DBException e) {

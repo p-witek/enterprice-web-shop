@@ -35,7 +35,7 @@
             <tr>
                 <td>
                     <form action="zamowienia">
-                        <button type="submit" name="subBuyServ" value="kup">Kup</button>
+                        <button type="submit" name="buy" value="buy">Kup</button>
                     </form>
                 </td>
             </tr>

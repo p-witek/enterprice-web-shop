@@ -23,6 +23,9 @@ public class Order {
     public int getId() {
         return id;
     }
+    public String getIdString(){
+        return Integer.toString(id);
+    }
     public void setId(int id) {
         this.id = id;
     }

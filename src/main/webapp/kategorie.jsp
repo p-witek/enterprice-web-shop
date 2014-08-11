@@ -60,7 +60,7 @@
                 </td>
                 <td>
                     <form action="zamowienia">
-                        <button type="submit" name="subBuyServ" value="wyswietl">Historia zamowien</button>
+                        <button type="submit" name="showOrders" value="showOrders">Historia zamowien</button>
                     </form>
                 </td>
             </tr>

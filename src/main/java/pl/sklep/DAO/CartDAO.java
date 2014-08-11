@@ -3,6 +3,7 @@ package pl.sklep.DAO;
 import pl.sklep.DAO.exceptions.DBException;
 import pl.sklep.DAO.exceptions.DBRecordNotFound;
 import pl.sklep.model.Cart;
+import pl.sklep.model.Order;
 import pl.sklep.model.Product;
 import pl.sklep.model.User;
 
@@ -24,12 +25,18 @@ public class CartDAO {
             " WHERE id_cart = %d  AND id_product = %d ;";
     private static final String INSERT_NEW_CART = "INSERT INTO public.carts (id_user) VALUES (%d)" +
             "returning id_cart";
+    private static final String SELECT_CART_BY_ORDERS_ID = "SELECT carts.id_cart FROM public.carts" +
+            " WHERE id_order IS NOT NULL AND id_user = %d;";
+    private static final String SELECT_CART_BY_ID = "select * from public.carts " +
+            "where carts.id_cart = %d;";
 
     private static final String COL_ID_CART = "id_cart";
     private static final String COL_ID_USER = "id_user";
     private static final String COL_AMOUNT = "amount";
+    private static final String COL_ID_ORDER = "id_order";
 
     private DataBaseInterface mDataBaseInterface;
+
 
     public CartDAO(DataBaseInterface dataBaseInterface){
         mDataBaseInterface = dataBaseInterface;
@@ -39,10 +46,35 @@ public class CartDAO {
         try {
             ResultSet resultSet = mDataBaseInterface.query(String.format(SELECT_EMPTY_CART, id_user));
             if (resultSet.next()) {
-                return fromDBResult(resultSet);
+                return fromDBResultOpenCart(resultSet);
             }
             return null;
         }catch (SQLException e){
+            throw new DBException();
+        }
+    }
+
+    public ArrayList<Cart> getCartsWithOrder(int id_user) throws DBException {
+        ArrayList<Cart> carts = new ArrayList<Cart>();
+        try {
+            ResultSet resultSet = mDataBaseInterface.query(String.format(SELECT_CART_BY_ORDERS_ID,id_user));
+            while (resultSet.next()){
+                carts.add(getCart(resultSet.getInt(COL_ID_CART)));
+            }
+            return carts;
+        } catch (SQLException e) {
+            throw new DBException();
+        }
+    }
+
+    public Cart getCart(int id_cart) throws DBException {
+        try {
+            ResultSet resultSet = mDataBaseInterface.query(String.format(SELECT_CART_BY_ID, id_cart));
+            if (resultSet.next()){
+                return fromDBResult(resultSet);
+            }
+            throw new DBRecordNotFound();
+        } catch (SQLException e) {
             throw new DBException();
         }
     }
@@ -76,13 +108,32 @@ public class CartDAO {
         }
     }
 
-    private Cart fromDBResult(ResultSet resultSet) throws SQLException {
+
+    private Cart fromDBResultOpenCart(ResultSet resultSet) throws SQLException {
         Cart cart = new Cart();
         cart.setId_cart(resultSet.getInt(COL_ID_CART));
         cart.setProducts(getCartProducts(resultSet.getInt(COL_ID_CART)));
         cart.setUser(getCartOwner(resultSet.getInt(COL_ID_USER)));
         cart.setOrder(null);
         return cart;
+    }
+
+    private Cart fromDBResult(ResultSet resultSet) throws SQLException {
+        Cart cart = new Cart();
+        cart.setId_cart(resultSet.getInt(COL_ID_CART));
+        cart.setProducts(getCartProducts(resultSet.getInt(COL_ID_CART)));
+        cart.setUser(getCartOwner(resultSet.getInt(COL_ID_USER)));
+        cart.setOrder(getOrder(resultSet.getInt(COL_ID_ORDER)));
+        return cart;
+    }
+
+    private Order getOrder(int id_order) throws SQLException {
+        OrderDAO orderDAO = new OrderDAO(mDataBaseInterface);
+        try {
+            return orderDAO.getOrder(id_order);
+        } catch (DBException e) {
+            throw new SQLException();
+        }
     }
 
     private ArrayList<Product> getCartProducts(int cart_id) throws SQLException {
