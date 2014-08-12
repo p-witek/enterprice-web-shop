@@ -37,8 +37,8 @@ public class LoginServlet extends HttpServlet {
             req.getSession().setAttribute("user", loggedUser);
             //prepareCategories(req);
             //req.setAttribute("login", loggedUser.getLogin());
-            req.getRequestDispatcher("kat").forward(req, resp);
-
+            //req.getRequestDispatcher("kat").forward(req, resp);
+            resp.sendRedirect("kat");
             //przygotujKategorie(baseInterface, req, resp);
 
             //String login = (String) req.getSession().getAttribute("login");

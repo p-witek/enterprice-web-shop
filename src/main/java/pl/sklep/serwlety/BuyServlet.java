@@ -34,35 +34,41 @@ public class BuyServlet extends HttpServlet {
         mDataBaseInterface = new DataBaseInterface();
         orderDAO = new OrderDAO(mDataBaseInterface);
 
-        try {
-            mDataBaseInterface.connect();
-        } catch (DBException e) {
-            System.out.println("Problem z podlaczeniem do bazy");
-            e.printStackTrace();
-        }
-
-        if (req.getParameter(BUY_PARAMETER_NAME) != null) {
+        if (req.getSession().getAttribute("user") != null) {
             try {
-                User loggedUser = (User) req.getSession().getAttribute("user");
-                CartDAO cartDAO = new CartDAO(mDataBaseInterface);
-                Cart cart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
-                orderDAO.createNewOrder(cart.getId_cart(),getCurrentDate(), TEMP_ADDRESS);
+                mDataBaseInterface.connect();
             } catch (DBException e) {
+                System.out.println("Problem z podlaczeniem do bazy");
                 e.printStackTrace();
             }
-            req.getRequestDispatcher("kat").forward(req, resp);
-        }
 
-        if (req.getParameter(SHOW_ORDERS_PARAM) != null){
+//          if (req.getParameter(BUY_PARAMETER_NAME) != null) {
+//               try {
+//                User loggedUser = (User) req.getSession().getAttribute("user");
+//                CartDAO cartDAO = new CartDAO(mDataBaseInterface);
+//                Cart cart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
+//                orderDAO.createNewOrder(cart.getId_cart(),getCurrentDate(), TEMP_ADDRESS);
+//               } catch (DBException e) {
+//                e.printStackTrace();
+//               }
+//               req.getRequestDispatcher("kat").forward(req, resp);
+//          }
+
+            //if (req.getParameter(SHOW_ORDERS_PARAM) != null){
             prepareOrdersToShow(req);
             req.getRequestDispatcher("orders.jsp").forward(req, resp);
-        }
+            // }
 
-        try {
-            mDataBaseInterface.disconnect();
-        } catch (DBException e) {
-            System.out.println("Problem z rozlaczeniem bazy");
-            e.printStackTrace();
+            try {
+                mDataBaseInterface.disconnect();
+            } catch (DBException e) {
+                System.out.println("Problem z rozlaczeniem bazy");
+                e.printStackTrace();
+            }
+
+        }
+        else{
+            resp.sendRedirect("disc");
         }
 //        String wybor = req.getParameter("subBuyServ");
 //

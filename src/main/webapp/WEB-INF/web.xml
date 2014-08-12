@@ -29,8 +29,8 @@
     </servlet>
 
     <servlet>
-        <servlet-name>CartServlet</servlet-name>
-        <servlet-class>pl.sklep.serwlety.CartServlet</servlet-class>
+        <servlet-name>ShowCartServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.ShowCartServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -48,6 +48,16 @@
         <servlet-class>pl.sklep.serwlety.ProdServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>AddProdServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.AddProdServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AddOrderServlet</servlet-name>
+        <servlet-class>pl.sklep.serwlety.AddOrderServlet</servlet-class>
+    </servlet>
+
     <!--Here we're defining URL mapping to each previously defined servlets-->
 
     <servlet-mapping>
@@ -62,11 +72,11 @@
 
     <servlet-mapping>
         <servlet-name>DiscServlet</servlet-name>
-        <url-pattern>/wylogowanie</url-pattern>
+        <url-pattern>/disc</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>CartServlet</servlet-name>
+        <servlet-name>ShowCartServlet</servlet-name>
         <url-pattern>/cart</url-pattern>
     </servlet-mapping>
 
@@ -77,7 +87,7 @@
 
     <servlet-mapping>
         <servlet-name>BuyServlet</servlet-name>
-        <url-pattern>/zamowienia</url-pattern>
+        <url-pattern>/orders</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -85,4 +95,13 @@
         <url-pattern>/prod</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>AddProdServlet</servlet-name>
+        <url-pattern>/addProd</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AddOrderServlet</servlet-name>
+        <url-pattern>/addOrder</url-pattern>
+    </servlet-mapping>
 </web-app>

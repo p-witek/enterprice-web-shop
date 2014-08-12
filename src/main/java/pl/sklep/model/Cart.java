@@ -39,4 +39,14 @@ public class Cart {
     public void setOrder(Order order) {
         this.order = order;
     }
+    public int getSummaryPrice(){
+        int summaryPrice = 0;
+        for (Product p : products){
+            summaryPrice += p.getSummaryPrice();
+        }
+        return summaryPrice;
+    }
+    public String getSummaryPriceString(){
+        return Integer.toString(getSummaryPrice());
+    }
 }

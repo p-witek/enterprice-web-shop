@@ -49,4 +49,10 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+    public int getSummaryPrice(){
+        return amount*price;
+    }
+    public String getSummaryPriceString(){
+        return Integer.toString(amount*price);
+    }
 }

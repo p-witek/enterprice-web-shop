@@ -23,9 +23,11 @@ public class FormServlet extends HttpServlet {
         sesja.setMaxInactiveInterval(2000);
 
         if (sesja.getAttribute("user") == null) {
-            resp.sendRedirect("formularz.jsp");
+            //resp.sendRedirect("formularz.jsp");
+            req.getRequestDispatcher("formularz.jsp").forward(req, resp);
         }
         else {
+            //req.getRequestDispatcher("kat").forward(req, resp);
             resp.sendRedirect("kat");
         }
 

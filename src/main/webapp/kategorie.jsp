@@ -9,62 +9,72 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="Stylesheet" type="text/css" href="css/style.css" />
     <title></title>
 </head>
 <body>
-    <div align="center">
-        <% User user = (User) session.getAttribute("user");%>
-        <p>Zalogowano jako <%= user.getLogin()%></p>
-        <h1>Siema Eniu!!!</h1>
+    <div class="container upMargin bottomPadding">
+        <div class="row">
+            <div class="col-xs-12 center">
+                <% User user = (User) session.getAttribute("user");%>
+                <p>Zalogowano jako <%= user.getLogin()%></p>
+                <h1>Siema Eniu!!!</h1>
+            </div>
+        </div>
 
-        <% ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categories");%>
-        <table>
-            <% Iterator it = categories.iterator();
-                while(it.hasNext()){
-                Category category = (Category) it.next();
-                String name = category.getName();%>
+        <div class="row">
+            <div class="col-xs-12 center">
+                <div class="btn-group">
+                    <button onClick="location='kat'" type="button" class="btn btn-default">
+                        <span>Glowna</span>
+                    </button>
+                    <button onClick="location='cart'" type="button" class="btn btn-default">
+                        <span>Pokaz koszyk</span>
+                    </button>
+                    <button onClick="location='orders'" type="button" class="btn btn-default">
+                        <span>Historia zamowien</span>
+                    </button>
+                    <button onClick="location='disc'" type="button" class="btn btn-default">
+                        <span>Wyloguj</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                <tr>
-                    <td>
-                        <form action="prod">
-                            <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
-                        </form>
-                     </td>
-                     <% if (it.hasNext()){
-                      category = (Category) it.next();
-                      name = category.getName();%>
-                     <td>
-                        <form action="prod">
-                          <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
-                        </form>
+        <div class="row">
+            <div class="col-xs-12 center  upMargin">
+                <% ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categories");%>
+                <div  style="text-align: center;">
+                    <table style="margin: 0 auto;">
+                        <% Iterator it = categories.iterator();
+                            while(it.hasNext()){
+                            Category category = (Category) it.next();
+                            String name = category.getName();%>
 
-                     </td>
-                     <% } %>
-                </tr>
-
-            <% } %>
-        </table>
-
-        <table>
-            <tr>
-                <td>
-                    <form action="wylogowanie">
-                        <button type="submit" name="wyloguj">Wyloguj</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="cart">
-                        <button type="submit" name="showCart">Pokaz Koszyk</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="zamowienia">
-                        <button type="submit" name="showOrders" value="showOrders">Historia zamowien</button>
-                    </form>
-                </td>
-            </tr>
-        </table>
+                            <tr>
+                                <td style="padding: 5px 5px 5px 5px;">
+                                    <form action="prod">
+                                        <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
+                                    </form>
+                                </td>
+                                 <% if (it.hasNext()){
+                                  category = (Category) it.next();
+                                  name = category.getName();%>
+                                <td style="padding: 5px 5px 5px 5px;">
+                                    <form action="prod">
+                                      <input type="submit" class="kat" name="enterCategory" value="<%= name %>" />
+                                    </form>
+                                </td>
+                                 <% } %>
+                            </tr>
+                        <% } %>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

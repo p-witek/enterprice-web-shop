@@ -35,22 +35,23 @@ public class KatServlet extends HttpServlet {
         baseInterface = new DataBaseInterface();
         categoryDAO = new CategoryDAO(baseInterface);
 
-        try {
-            baseInterface.connect();
-        } catch (DBException e) {
-            System.out.println("Blad z polaczeniem do bazy");
-            e.printStackTrace();
-        }
+        if (req.getSession().getAttribute("user") != null) {
+            try {
+                baseInterface.connect();
+            } catch (DBException e) {
+                System.out.println("Blad z polaczeniem do bazy");
+                e.printStackTrace();
+            }
 
-        prepareCategories(req);
-        req.getRequestDispatcher(CATEGORY_PAGE).forward(req, resp);
+            prepareCategories(req);
+            req.getRequestDispatcher(CATEGORY_PAGE).forward(req, resp);
 
-        try {
-            baseInterface.disconnect();
-        } catch (DBException e) {
-            System.out.println("Blad z rozlaczeniem bazy");
-            e.printStackTrace();
-        }
+            try {
+                baseInterface.disconnect();
+            } catch (DBException e) {
+                System.out.println("Blad z rozlaczeniem bazy");
+                e.printStackTrace();
+            }
 
 //        String kat = req.getParameter("kategoria");
 //
@@ -61,6 +62,10 @@ public class KatServlet extends HttpServlet {
 //        else{
 //            req.getRequestDispatcher("wylogowanie").forward(req,resp);
 //        }
+        }
+        else{
+            resp.sendRedirect("disc");
+        }
     }
 
     private void prepareCategories(HttpServletRequest req){

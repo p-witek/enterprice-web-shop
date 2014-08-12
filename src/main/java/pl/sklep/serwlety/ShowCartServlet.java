@@ -17,14 +17,11 @@ import java.io.IOException;
 /**
 * Created by piotr on 25.07.14.
 */
-public class CartServlet extends HttpServlet {
-    private static final String ID_PARAMETER_NAME = "toCart";
-    private static final String SHOW_CART_PARAMETER = "showCart";
+public class ShowCartServlet extends HttpServlet {
     private static final String CART_PARAMETER_NAME = "cart";
 
     private DataBaseInterface mDataBaseInterface;
     private CartDAO cartDAO;
-    private ProductDAO productDAO;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,30 +30,33 @@ public class CartServlet extends HttpServlet {
         //init DataBase model
         mDataBaseInterface = new DataBaseInterface();
         cartDAO = new CartDAO(mDataBaseInterface);
-        productDAO = new ProductDAO(mDataBaseInterface);
 
-        try {
-            mDataBaseInterface.connect();
-        } catch (DBException e) {
-            System.out.println("Problem z podlaczeniem do bazy.");
-            e.printStackTrace();
-        }
+        if (req.getSession().getAttribute("user") != null) {
+            try {
+                mDataBaseInterface.connect();
+            } catch (DBException e) {
+                System.out.println("Problem z podlaczeniem do bazy.");
+                e.printStackTrace();
+            }
+//
+//        if (req.getParameter(ID_PARAMETER_NAME) != null){
+//            addProductToCart(req);
+//            resp.sendRedirect("kat");
+//        }
 
-        if (req.getParameter(ID_PARAMETER_NAME) != null){
-            addProductToCart(req);
-            resp.sendRedirect("kat");
-        }
-
-        if (req.getParameter(SHOW_CART_PARAMETER) != null){
+            //if (req.getParameter(SHOW_CART_PARAMETER) != null){
             prepareCartProducts(req);
             req.getRequestDispatcher("cart.jsp").forward(req, resp);
-        }
+            //}
 
-        try {
-            mDataBaseInterface.disconnect();
-        } catch (DBException e) {
-            System.out.println("Problem z rozlaczeniem bazy.");
-            e.printStackTrace();
+            try {
+                mDataBaseInterface.disconnect();
+            } catch (DBException e) {
+                System.out.println("Problem z rozlaczeniem bazy.");
+                e.printStackTrace();
+            }
+        }else{
+            resp.sendRedirect("disc");
         }
     }
 
@@ -71,30 +71,30 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-    private void addProductToCart(HttpServletRequest req){
-        User loggedUser = (User) req.getSession().getAttribute("user");
-        try {
-            Cart openCart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
-            if (openCart == null){
-                try {
-                    int idOpenCart = cartDAO.createNewCart(loggedUser.getId_user());
-                    int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
-                    cartDAO.addProductToCart(product_id, idOpenCart);
-                } catch (DBException e1) {
-                    System.out.println("Problem z baza danych");
-                    e1.printStackTrace();
-                }
-            }
-            else {
-                int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
-                cartDAO.addProductToCart(product_id, openCart.getId_cart());
-            }
-        }
-        catch (DBException e) {
-            System.out.println("Blad przy pobieraniu danych z bazy");
-            e.printStackTrace();
-        }
-    }
+//    private void addProductToCart(HttpServletRequest req){
+//        User loggedUser = (User) req.getSession().getAttribute("user");
+//        try {
+//            Cart openCart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
+//            if (openCart == null){
+//                try {
+//                    int idOpenCart = cartDAO.createNewCart(loggedUser.getId_user());
+//                    int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
+//                    cartDAO.addProductToCart(product_id, idOpenCart);
+//                } catch (DBException e1) {
+//                    System.out.println("Problem z baza danych");
+//                    e1.printStackTrace();
+//                }
+//            }
+//            else {
+//                int product_id = Integer.parseInt(req.getParameter(ID_PARAMETER_NAME));
+//                cartDAO.addProductToCart(product_id, openCart.getId_cart());
+//            }
+//        }
+//        catch (DBException e) {
+//            System.out.println("Blad przy pobieraniu danych z bazy");
+//            e.printStackTrace();
+//        }
+//    }
 
     //bylo w funkcji doGet()
         //resp.getWriter().print(req.getParameter("doKoszyka"));

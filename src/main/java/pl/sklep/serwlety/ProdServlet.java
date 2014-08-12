@@ -28,32 +28,36 @@ public class ProdServlet extends HttpServlet {
         mDataBaseInterface = new DataBaseInterface();
         productDAO = new ProductDAO(mDataBaseInterface);
 
-        try {
-            mDataBaseInterface.connect();
-        } catch (DBException e) {
-            System.out.println("Problem z podlaczeniem do bazy");
-            e.printStackTrace();
+        if (req.getSession().getAttribute("user") != null) {
+            try {
+                mDataBaseInterface.connect();
+            } catch (DBException e) {
+                System.out.println("Problem z podlaczeniem do bazy");
+                e.printStackTrace();
+            }
+
+            prepareProducts(req);
+            req.getRequestDispatcher(PRODUCTS_PAGE).forward(req, resp);
+
+            try {
+                mDataBaseInterface.disconnect();
+            } catch (DBException e) {
+                System.out.println("Problem z rozlaczeniem bazy");
+                e.printStackTrace();
+            }
         }
-
-        prepareProducts(req);
-        req.getRequestDispatcher(PRODUCTS_PAGE).forward(req, resp);
-
-        try {
-            mDataBaseInterface.disconnect();
-        } catch (DBException e) {
-            System.out.println("Problem z rozlaczeniem bazy");
-            e.printStackTrace();
+        else {
+            resp.sendRedirect("disc");
         }
     }
 
     private void prepareProducts(HttpServletRequest req){
         try {
-            req.setAttribute(PRODUCTS_ATTRIBUTE_NAME, productDAO.getProducts(req.getParameter(NAME_SELECT_CAT_PARAM)));
+            req.setAttribute(PRODUCTS_ATTRIBUTE_NAME, productDAO.getProducts(
+                    req.getParameter(NAME_SELECT_CAT_PARAM)));
         }catch (DBException e) {
             System.out.println("Problem z zapytaniem do bazy");
             e.printStackTrace();
         }
-
-
     }
 }
