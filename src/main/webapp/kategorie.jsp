@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-xs-12 center">
                 <div class="btn-group">
-                    <button onClick="location='kat'" type="button" class="btn btn-default">
+                    <button onClick="location='kat'" type="button" class="btn btn-default active">
                         <span>Glowna</span>
                     </button>
                     <button onClick="location='cart'" type="button" class="btn btn-default">

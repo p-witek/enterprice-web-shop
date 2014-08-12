@@ -29,7 +29,7 @@
                     <button onClick="location='kat'" type="button" class="btn btn-default">
                         <span>Glowna</span>
                     </button>
-                    <button onClick="location='cart'" type="button" class="btn btn-default">
+                    <button onClick="location='cart'" type="button" class="btn btn-default active">
                         <span>Pokaz koszyk</span>
                     </button>
                     <button onClick="location='orders'" type="button" class="btn btn-default">

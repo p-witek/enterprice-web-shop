@@ -33,7 +33,7 @@
                     <button onClick="location='cart'" type="button" class="btn btn-default">
                         <span>Pokaz koszyk</span>
                     </button>
-                    <button onClick="location='orders'" type="button" class="btn btn-default">
+                    <button onClick="location='orders'" type="button" class="btn btn-default active">
                         <span>Historia zamowien</span>
                     </button>
                     <button onClick="location='disc'" type="button" class="btn btn-default">

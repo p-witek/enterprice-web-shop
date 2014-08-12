@@ -2,27 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05f51344-d94b-47e0-8fd6-baba52f4ed87" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/AddOrderServlet.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/AddProdServlet.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/formularz.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/webapp/powitanie.html" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/CartServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/ShowCartServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/BuyServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/BuyServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/model/Cart.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/model/Cart.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/DiscServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/DiscServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/FormServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/FormServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/KatServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/KatServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/LoginServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/LoginServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/ProdServlet.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/ProdServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/sklep/model/Product.java" afterPath="$PROJECT_DIR$/src/main/java/pl/sklep/model/Product.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/cart.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/cart.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/formularz.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/formularz.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/kategorie.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/kategorie.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/orders.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/orders.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/products.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/products.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/css/style.css" afterPath="$PROJECT_DIR$/src/main/webapp/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Prosty_sklep.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -364,17 +346,17 @@
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/model/Product.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/css/style.css" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/model/Cart.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/orders.jsp" />
-        <option value="$PROJECT_DIR$/src/main/webapp/kategorie.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/products.jsp" />
-        <option value="$PROJECT_DIR$/src/main/webapp/cart.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/AddOrderServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/AddProdServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/ProdServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/ShowCartServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/BuyServlet.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/sklep/serwlety/KatServlet.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/cart.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/kategorie.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/orders.jsp" />
       </list>
     </option>
   </component>
@@ -1149,38 +1131,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/products.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5355372" vertical-offset="990" max-vertical-offset="1926">
-          <caret line="73" column="51" selection-start-line="73" selection-start-column="51" selection-end-line="73" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/kategorie.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.37864077" vertical-offset="738" max-vertical-offset="1530">
-          <caret line="28" column="42" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/cart.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7864077" vertical-offset="336" max-vertical-offset="1764">
-          <caret line="80" column="58" selection-start-line="80" selection-start-column="58" selection-end-line="80" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/orders.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5339806" vertical-offset="1164" max-vertical-offset="1836">
-          <caret line="83" column="38" selection-start-line="83" selection-start-column="38" selection-end-line="83" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.2038835" vertical-offset="1128" max-vertical-offset="2016">
@@ -1269,6 +1219,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.1785124" vertical-offset="450" max-vertical-offset="5328">
           <caret line="31" column="50" selection-start-line="31" selection-start-column="50" selection-end-line="31" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/products.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.785124" vertical-offset="234" max-vertical-offset="1926">
+          <caret line="73" column="51" selection-start-line="73" selection-start-column="51" selection-end-line="73" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/orders.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3592233" vertical-offset="408" max-vertical-offset="1836">
+          <caret line="35" column="99" selection-start-line="35" selection-start-column="99" selection-end-line="35" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/kategorie.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47603306" vertical-offset="252" max-vertical-offset="1530">
+          <caret line="30" column="96" selection-start-line="30" selection-start-column="96" selection-end-line="30" selection-end-column="96" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/cart.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5339806" vertical-offset="228" max-vertical-offset="1764">
+          <caret line="31" column="97" selection-start-line="31" selection-start-column="97" selection-end-line="31" selection-end-column="97" />
           <folding />
         </state>
       </provider>
