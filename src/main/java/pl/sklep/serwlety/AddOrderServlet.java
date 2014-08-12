@@ -35,6 +35,7 @@ public class AddOrderServlet extends HttpServlet {
             } catch (DBException e) {
                 System.out.println("Problem z podlaczeniem do bazy");
                 e.printStackTrace();
+                return;
             }
 
             try {

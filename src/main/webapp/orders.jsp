@@ -88,7 +88,7 @@
 
                     <% } %>
                     <%}else {%>
-                        <p>Nie masz jeszcze zadnych zrealizowanych zamowien :< :< :<</p>
+                        <p class="center">Nie masz jeszcze zadnych zrealizowanych zamowien :< :< :<</p>
                     <% } %>
             </div>
         </div>

@@ -46,7 +46,7 @@ public class DataBaseInterface {
     }
 
     /** Do odpalenia w obiektach DAO */
-     void update(String query) throws SQLException {
+    void update(String query) throws SQLException {
         Statement st = polaczenie.createStatement();
         st.executeUpdate(query);
     }
