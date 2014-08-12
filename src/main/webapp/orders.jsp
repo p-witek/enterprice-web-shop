@@ -80,7 +80,7 @@
                             <td class="reset"></td>
                             <td class="reset"></td>
                             <td class="reset"></td>
-                            <th>Suma</td>
+                            <th>Suma</th>
                             <td><%= cart.getSummaryPriceString() %> zl</td>
                         </tr>
                     </table>

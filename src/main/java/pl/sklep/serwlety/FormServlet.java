@@ -23,37 +23,10 @@ public class FormServlet extends HttpServlet {
         sesja.setMaxInactiveInterval(2000);
 
         if (sesja.getAttribute("user") == null) {
-            //resp.sendRedirect("formularz.jsp");
             req.getRequestDispatcher("formularz.jsp").forward(req, resp);
         }
         else {
-            //req.getRequestDispatcher("kat").forward(req, resp);
             resp.sendRedirect("kat");
         }
-
-
-//        if (sesja.getAttribute("login") == null) {
-//            //req.getRequestDispatcher("formularz.html").forward(req, resp);
-//            req.getRequestDispatcher("formularz.jsp").forward(req,resp);
-//        }
-//        else {
-//            req.setAttribute("login", sesja.getAttribute("login"));
-//            req.setAttribute("produkty", sesja.getAttribute("produkty"));
-//            req.setAttribute("kategorie", sesja.getAttribute("kategorie"));
-//
-//            if(req.getAttribute("produkty")== null){
-//                PrintWriter pw = resp.getWriter();
-//                pw.print("blad, brak produktow");
-//            }
-//            else{
-//                req.getRequestDispatcher("kategorie.jsp").forward(req, resp);
-//                /*PrintWriter pw = resp.getWriter();
-//                ArrayList<Produkt> pr = (ArrayList<Produkt>)sesja.getAttribute("produkty");
-//                /*for (int i = 0; i < pr.size(); i++){
-//                    pw.println(pr.get(i).getNazwa() + " " + pr.get(i).getCenaString());
-//                }*/
-//            }
-//
-//        }
     }
 }

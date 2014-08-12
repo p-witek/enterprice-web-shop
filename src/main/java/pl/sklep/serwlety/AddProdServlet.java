@@ -2,7 +2,6 @@ package pl.sklep.serwlety;
 
 import pl.sklep.DAO.CartDAO;
 import pl.sklep.DAO.DataBaseInterface;
-import pl.sklep.DAO.ProductDAO;
 import pl.sklep.DAO.exceptions.DBException;
 import pl.sklep.model.Cart;
 import pl.sklep.model.User;

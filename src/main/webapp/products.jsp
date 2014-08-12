@@ -83,20 +83,5 @@
             </div>
         </div>
     </div>
-        <!--<table>
-            <tr>
-                <td>
-                    <form action="wylogowanie">
-                        <button type="submit" name="wyloguj">Wyloguj</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="koszyk.jsp">
-                        <button type="submit" name="pokazKosz">Pokaz Koszyk</button>
-                    </form>
-                </td>
-            </tr>
-        </table>-->
-    </div>
 </body>
 </html>

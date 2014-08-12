@@ -28,7 +28,6 @@ public class ProductDAO {
     private static final String COL_PRICE_PRODUCT = "price";
     private static final String COL_AMOUNT_PRODUCT = "amount";
 
-
     private DataBaseInterface mDataBaseInterface;
 
     public ProductDAO(DataBaseInterface dataBaseInterface){
@@ -96,5 +95,4 @@ public class ProductDAO {
             throw new SQLException();
         }
     }
-
 }

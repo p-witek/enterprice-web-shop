@@ -16,7 +16,6 @@ public class UserDAO {
 
     private static final String SELECT_BY_NAME = "select * from public.\"users\" where login='%s'";
     private static final String SELECT_BY_ID = "select * from public.\"users\" where id_user=%d";
-    //private static final String SELECT_BY_NAME_PASS = "select * from public.user where login='%s' AND password='%s'";
 
     private static final String COL_ID_USER = "id_user";
     private static final String COL_LOGIN = "login";
@@ -51,18 +50,6 @@ public class UserDAO {
             throw new DBException();
         }
     }
-
-//    public User getUser(String userName, String password) throws DBException {
-//        try{
-//            ResultSet resultSet = mDataBaseInterface.query(String.format(SELECT_BY_NAME_PASS, userName, password));
-//            if (resultSet.next()){
-//                return fromDBResult(resultSet);
-//            }
-//            throw new DBFailUserAuthorization();
-//        }catch (SQLException e){
-//            throw new DBException();
-//        }
-//    }
 
     private User fromDBResult(ResultSet resultSet) throws SQLException {
         User user = new User();

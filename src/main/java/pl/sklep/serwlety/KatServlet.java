@@ -31,7 +31,6 @@ public class KatServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         //init model
-
         baseInterface = new DataBaseInterface();
         categoryDAO = new CategoryDAO(baseInterface);
 
@@ -52,16 +51,6 @@ public class KatServlet extends HttpServlet {
                 System.out.println("Blad z rozlaczeniem bazy");
                 e.printStackTrace();
             }
-
-//        String kat = req.getParameter("kategoria");
-//
-//        if (req.getSession().getAttribute("login") != null) {
-//            wybierzProduktyZJednejKat(kat, req, resp);
-//            req.getRequestDispatcher("products.jsp").forward(req, resp);
-//        }
-//        else{
-//            req.getRequestDispatcher("wylogowanie").forward(req,resp);
-//        }
         }
         else{
             resp.sendRedirect("disc");
@@ -80,19 +69,4 @@ public class KatServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
-//    private void wybierzProduktyZJednejKat(String kat, HttpServletRequest req, HttpServletResponse resp){
-//        HttpSession sesja = req.getSession();
-//
-//        ArrayList<Produkt> produkty = (ArrayList<Produkt>) sesja.getAttribute("produkty");
-//        ArrayList<Produkt> wybrane = new ArrayList<Produkt>();
-//
-//        for (Produkt pr : produkty){
-//            if (pr.getKategoria().equals(kat)) wybrane.add(pr);
-//        }
-//        //sesja.setAttribute("wybrane", wybrane);
-//        req.setAttribute("wybrane", wybrane);
-//        req.setAttribute("login", sesja.getAttribute("login"));
-//
-//    }
 }
