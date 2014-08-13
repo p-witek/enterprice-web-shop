@@ -17,6 +17,7 @@ import java.io.IOException;
  */
 public class AddProdServlet extends HttpServlet {
     private static final String ID_PARAMETER_NAME = "toCart";
+    private static final String REDIRECT_PARAM_NAME = "redirect";
 
     private DataBaseInterface mDataBaseInterface;
     private CartDAO cartDAO;
@@ -36,7 +37,15 @@ public class AddProdServlet extends HttpServlet {
             }
 
             addProductToCart(req);
-            resp.sendRedirect("kat");
+
+            if (req.getParameter(REDIRECT_PARAM_NAME).equals("cart")) {
+                resp.sendRedirect("cart");
+            }
+            else{
+                String returningPage = "prod" + "?enterCategory="
+                        + req.getParameter(REDIRECT_PARAM_NAME);
+                resp.sendRedirect(returningPage);
+            }
 
             try {
                 mDataBaseInterface.disconnect();

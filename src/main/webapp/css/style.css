@@ -35,3 +35,7 @@ td.reset{
     background: none !important;
     border-top: 0px !important;
 }
+
+.inline{
+    display: inline !important;
+}
