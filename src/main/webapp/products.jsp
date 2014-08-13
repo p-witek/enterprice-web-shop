@@ -18,11 +18,6 @@
     <title></title>
 </head>
 <body>
-
-
-
-
-
     <div class="container  upMargin bottomPadding">
         <div class="row">
             <div class="col-xs-12 center">
@@ -109,7 +104,7 @@
                                         </table>
                                       </div>
                                       <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
                                         <form class="inline" action="addProd">
                                             <input type="hidden" name="redirect" value="<%= category %>" />
                                             <button type="submit" class="btn btn-primary" name="toCart" value="<%= id %>">
@@ -127,10 +122,6 @@
                                   </div>
                                 </div>
 
-                                    <!-- <form action="addProd">
-                                        <button class="btn btn-default btn-xs" type="submit" name="toCart" value="<%= id %>">
-                                            <span class="glyphicon glyphicon-shopping-cart"></span>Do koszyka</button>
-                                    </form> -->
                                 </td>
                             </tr>
                         <%}%>

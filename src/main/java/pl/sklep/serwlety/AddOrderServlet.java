@@ -18,7 +18,7 @@ import java.util.Calendar;
  * Created by piotr on 12.08.14.
  */
 public class AddOrderServlet extends HttpServlet {
-    private static final String TEMP_ADDRESS = "ulica";
+    private static final String ADDRESS_PARAM_NAME = "address";
 
     DataBaseInterface mDataBaseInterface;
     OrderDAO orderDAO;
@@ -42,7 +42,7 @@ public class AddOrderServlet extends HttpServlet {
                 User loggedUser = (User) req.getSession().getAttribute("user");
                 CartDAO cartDAO = new CartDAO(mDataBaseInterface);
                 Cart cart = cartDAO.getUsersOpenCart(loggedUser.getId_user());
-                orderDAO.createNewOrder(cart.getId_cart(), getCurrentDate(), TEMP_ADDRESS);
+                orderDAO.createNewOrder(cart.getId_cart(), getCurrentDate(), req.getParameter(ADDRESS_PARAM_NAME));
             } catch (DBException e) {
                 e.printStackTrace();
             }

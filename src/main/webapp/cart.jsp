@@ -10,6 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link rel="Stylesheet" type="text/css" href="css/style.css" />
     <meta charset="UTF-8">
     <title></title>
@@ -78,10 +81,44 @@
                         <td><%= cart.getSummaryPriceString() %> zl</td>
                     </tr>
                 </table>
-                <div style="margin: 0 auto;" class="center">
+                <!-- <div style="margin: 0 auto;" class="center">
                     <button  onClick="location='addOrder'"
                                     class="btn btn-default btn-lg" type="button">Zamow koszyk</button>
+                </div> -->
+
+                <div style="margin: 0 auto;" class="center">
+                    <button class="btn btn-default btn-lg" data-toggle="modal" data-target="#orderModal">
+                        Zamow koszyk
+                    </button>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="orderModalLabel">Do koszyka</h4>
+                      </div>
+                      <form action="addOrder">
+                          <div class="modal-body">
+                            <label for="addressInput">Podaj adres zamowienia </label>
+                            <input class="form-control" id="addressInput" type="text" name="address" />
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Anuluj
+                            </button>
+                            <button class="btn btn-primary" type="submit">
+                                Wyslij zamowienie
+                            </button>
+
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
 
                 <%}else {%>
                     <p class="center">Nie masz jeszcze zadnych produktow w koszyku :< :< :<</p>
